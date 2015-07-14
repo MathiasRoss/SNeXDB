@@ -1,7 +1,9 @@
 <?php
 include 'config.php';
 include 'calculations.php';
-
+include 'debugFunc.php';
+include 'searchForm.php';
+include 'table.php';
 
 //connect
 try {
@@ -12,26 +14,62 @@ catch(PDOException $e) {
 }
 
 
-try {
-    $result = $conn->query('SELECT * FROM Novae');
+//insert a search form
+insertForm($conn);
 
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)){
+
+//Declare array of inputs for query
+$params = array();
+
+
+
+
+//write query based on search
+$query = "SELECT * FROM Fits LEFT JOIN Observations ON Fits.obsID = Observations.obsID LEFT JOIN Novae on Observations.name= Novae.name WHERE ";
+
+//object name search
+if ($_GET["objid"] != ""){
+    $query = $query . "Observations.name = :name";
+    $params[':name'] = $_GET["objid"];
+}
+else {//note: without elif could cause unnecessary performance drops; here for "where blank search" bug
+    $query = $query . "Observations.name LIKE CONCAT('%',:name,'%')";
+    $params[':name'] = $_GET["name"];
+}
+
+//object type search
+
+
+
+$jsonTable = array();
+
+//run the query and create JSON table
+try {
+    $stmt = $conn -> prepare($query);
+    $stmt -> execute($params);
+    $result = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    foreach($result as $row){
+        $jsonTable[] = $row;
         echo $row['name'];
     }
 } 
 catch(PDOException $e) {
     echo $e -> getMessage();
 }
+?>
 
 
-//begin the query
-$query = "SELECT * FROM Fits LEFT JOIN Observations ON Fits.obsID = Observations.obsID LEFT JOIN Novae on Observations.name= Novae.name WHERE ";
+<script id="jsonTable" >
+<?php
+echo json_encode($jsonTable);
+?>
+</script>
 
-//object name search
-if ($_GET["objID"] != ""){
-    $query = $query . "name LIKE CONCAT('%',?,'%')";
-}
 
+
+
+<?php
+insertTable(10);
 
 
 //close connection

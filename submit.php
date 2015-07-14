@@ -27,11 +27,16 @@ while($name = mysqli_fetch_array($names)){
 ?>
 </select>
 
+<input type="text" name="instrument" placeholder = "instrument used" required>
 <input type="text" name="flux" placeholder = "flux" required>
-<input type="text" name="fluxRef" placeholder = "Reference" required>
-<input type="text" name="dateObserved" placeholder = "Date Observed (MJD)" required>
+<input type="text" name="fluxErrL" placeholder="flux error lower" >
+<input type="text" name="fluxErrH" placeholder="flux error upper; leave blank if same">
+<input type="text" name="fluxRef" placeholder = "Reference">
+<input type="text" name="dateObserved" placeholder = "Date Observed (MJD)">
+<input type="text" name="dateObservedRef" placeholder = "Date Observed Reference">
 <input type="text" name="fluxEnergyL" placeholder="lower bound flux energy" >
 <input type="text" name="fluxEnergyH" placeholder="upper bound flux energy">
+<input type="text" name="model" placeholder="model used">
 <br>
 <input type="submit">
 <br>
@@ -68,6 +73,12 @@ while($type = mysqli_fetch_array($types)){
 </form>
 
 
+
+<!-- Begin new fit form -->
+<form method="post" action = "checkNewFit.php">
+
+
+</form>
 
 
 <?php

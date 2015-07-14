@@ -15,6 +15,7 @@ if($_POST["flux_herror"] == ""){
 echo "You have selected the following: <br>";
 echo "Object name: " . $_POST["name"] . "<br>";
 echo "Instrument: " . $_POST["instrument"] . "<br>";
+echo "Model: " . $_POST["model"] . "<br>";
 echo "Flux: ". $_POST["flux"] . "<br>";
 echo "flux error (low,high): (" . $_POST["fluxErrL"] . ",". $_POST["fluxErrH"] .  ") <br>" ;
 echo "Energy range used in flux calculation: ". $_POST["fluxEnergyL"] ." - " . $_POST["fluxEnergyH"] . "<br>";
@@ -46,13 +47,16 @@ echo "<br>If these values are correct, press submit.  Else, go to previous page.
 <form method = "post" action = "newObs.php">
 
 <input type="hidden" name="name" value="<?php echo $_POST["name"]; ?>"> 
+<input type="hidden" name="instrument" value="<?php echo $_POST["instrument"]; ?>"> 
 <input type="hidden" name="flux" value="<?php echo $_POST["flux"]; ?>">
-<input type="hidden" name="flux_lerror" value="<?php echo $_POST["flux_lerror"]; ?>">
-<input type="hidden" name="flux_herror" value="<?php echo $_POST["flux_herror"]; ?>">
-<input type="hidden" name="flux_ref" value="<?php echo $_POST["flux_ref"]; ?>">
-<input type="hidden" name="date_observed" value="<?php echo $_POST["date_observed"]; ?>">
-<input type="hidden" name="flux_energy_low" value="<?php echo $_POST["flux_energy_low"]; ?>">
-<input type="hidden" name="flux_energy_high" value="<?php echo $_POST["flux_energy_high"]; ?>">
+<input type="hidden" name="fluxErrL" value="<?php echo $_POST["fluxErrL"]; ?>">
+<input type="hidden" name="fluxErrH" value="<?php echo $_POST["fluxErrH"]; ?>">
+<input type="hidden" name="fluxRef" value="<?php echo $_POST["fluxRef"]; ?>">
+<input type="hidden" name="dateObserved" value="<?php echo $_POST["dateObserved"]; ?>">
+<input type="hidden" name="dateObservedRef" value="<?php echo $_POST["dateObservedRef"]; ?>">
+<input type="hidden" name="fluxEnergyL" value="<?php echo $_POST["fluxEnergyL"]; ?>">
+<input type="hidden" name="fluxEnergyH" value="<?php echo $_POST["fluxEnergyH"]; ?>">
+<input type="hidden" name="model" value="<?php echo $_POST["model"]; ?>">
 <br>
 <input type="submit">
 <br>
