@@ -1,3 +1,7 @@
+<head>
+<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+</head>
+
 <?php
 include 'calculations.php';
 include 'debugFunc.php';

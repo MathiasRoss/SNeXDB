@@ -12,8 +12,9 @@ foreach ($result as $row){
     echo "</td><td>".$row['fluxEnergyL'].' - '.$row['fluxEnergyH']."</td><td>";
     echo $row['model']."</td><td>";
     echo $row['lum']."</td><td>";
-    echo refLink2($row['fluxRef'])."</td></tr>";
+    echo refLink($row['fluxRef'])."</td></tr>";
 }
 echo "</table>";
+
 
 ?>

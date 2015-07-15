@@ -34,8 +34,12 @@ catch(PDOException $e) {
 }
 
 foreach($result as $key => $row){
+//calculate values
     $result[$key]['age']=getAge($row['dateObserved'],$row['dateExploded']);
     $result[$key]['lum'] = getLum($row['distance'],$row['flux']);
+    $lumErrMag = floor(log10($result[$key]['lum']*$row['fluxErrL']/$row['flux']));
+    $result[$key]['lum'] = round($result[$key]['lum']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
+
 
 //remove excess zeros, using uncertainty values where available
     $result[$key]['flux']=removeZeros($row['flux'],getPrecision($row['fluxErrL']));
