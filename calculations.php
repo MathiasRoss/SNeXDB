@@ -34,10 +34,6 @@ function refLink($ref){
     $link = "<a href=\"http://adsabs.harvard.edu/abs/". $ref ."\">".$ref."</a>";
     return $link;
 }
-/*
-function getPrecision($error)
-{
-    return strlen(substr(strrchr(trim($error),'.'),1));
-}*/
+
 
 ?>

@@ -27,15 +27,24 @@ try {
     $stmt = $conn -> prepare($query);
     $stmt -> execute($params);
     $result = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-    foreach($result as $key => $row){
-        $result[$key]['age']=getAge($row['dateObserved'],$row['dateExploded']);
-        $result[$key]['lum'] = getLum($row['distance'],$row['flux']);
-        $jsonTable[] = $row;
-    }
+    $jsonTable[] = $row;
 } 
 catch(PDOException $e) {
     echo $e -> getMessage();
 }
+
+foreach($result as $key => $row){
+    $result[$key]['age']=getAge($row['dateObserved'],$row['dateExploded']);
+    $result[$key]['lum'] = getLum($row['distance'],$row['flux']);
+
+//remove excess zeros, using uncertainty values where available
+    $result[$key]['flux']=removeZeros($row['flux'],getPrecision($row['fluxErrL']));
+    $result[$key]['dateObserved']=removeZeros($row['dateObserved'],0);
+    $result[$key]['fluxEnergyL']=removeZeros($row['fluxEnergyL'],getPrecision($row['fluxEnergyL']));
+    $result[$key]['fluxEnergyH']=removeZeros($row['fluxEnergyH'],getPrecision($row['fluxEnergyH']));
+}
+
+
 
 $jsonTable = json_encode($jsonTable);
 
