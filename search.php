@@ -26,6 +26,16 @@ else if ($_GET["type"] != ""){
     $params[':type'] = $_GET["type"];
 }
 
+//flux search
+if ($_GET['fluxMin'] != ""){
+    $query = $query . " AND flux >= :fluxMin";
+    $params[':fluxMin'] = $_GET["fluxMin"];
+}
+if ($_GET['fluxMax'] != ""){
+    $query = $query . " AND flux <= :fluxMax";
+    $params['"fluxMax'] = $_GET["fluxMax"];
+}
+
 
 $jsonTable = array();
 
@@ -40,12 +50,27 @@ catch(PDOException $e) {
     echo $e -> getMessage();
 }
 
+
+
 foreach($result as $key => $row){
 //calculate values
     $result[$key]['age']=getAge($row['dateObserved'],$row['dateExploded']);
     $result[$key]['lum'] = getLum($row['distance'],$row['flux']);
     $lumErrMag = floor(log10($result[$key]['lum']*$row['fluxErrL']/$row['flux']));
     $result[$key]['lum'] = round($result[$key]['lum']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
+    $result[$key]['lum'] = $result[$key]['lum']*pow(10,-37);
+
+
+//check to see if within lum search
+    if ($_GET['lumMin'] != "" and $_GET['lumMin']>= $result[$key]['lum']){
+        unset($result[$key]);
+        continue;
+    }
+    if ($_GET['lumMax'] != "" and $_GET['lumMax']<= $result[$key]['lum']){
+        unset($result[$key]);
+        continue;
+    }
+ 
 
 
 //remove excess zeros, using uncertainty values where available
