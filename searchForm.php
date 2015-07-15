@@ -2,7 +2,7 @@
 
 
 
-//get menu information for database
+//get menu information from database
 try {
     $stmt = $conn->query("SELECT DISTINCT name FROM Observations");
     $names = $stmt-> fetchAll(PDO::FETCH_ASSOC);

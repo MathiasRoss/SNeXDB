@@ -14,6 +14,7 @@ catch(PDOException $e) {
 
 include 'searchForm.php';
 include 'search.php';
+include 'exportButton.php';
 
 include 'phpTable.php';
 
