@@ -1,6 +1,6 @@
 <?php
 
-function insertForm($conn){
+
 
 //get menu information for database
 try {
@@ -13,7 +13,7 @@ catch(PDOException $e) {
 
 ?>
 
-<form method = get action ="search.php">
+<form method = get action ="index.php">
 
 <!-- Object name pulldown -->
 <select name="objid">
@@ -30,8 +30,3 @@ foreach($names as $name){
 
 </form>
 
-<?php
-   
-}
-
-?>

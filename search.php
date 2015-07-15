@@ -1,27 +1,6 @@
 <?php
-include 'config.php';
-include 'calculations.php';
-include 'debugFunc.php';
-include 'searchForm.php';
-include 'table.php';
-
-//connect
-try {
-    $conn = new PDO("mysql:host=$servername; dbname=$dbname", $username, $password);
-}
-catch(PDOException $e) {
-    echo $e->getMessage();
-}
-
-
-//insert a search form
-insertForm($conn);
-
-
 //Declare array of inputs for query
 $params = array();
-
-
 
 
 //write query based on search
@@ -48,31 +27,17 @@ try {
     $stmt = $conn -> prepare($query);
     $stmt -> execute($params);
     $result = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-    foreach($result as $row){
+    foreach($result as $key => $row){
+        $result[$key]['age']=getAge($row['dateObserved'],$row['dateExploded']);
+        $result[$key]['lum'] = getLum($row['distance'],$row['flux']);
         $jsonTable[] = $row;
-        echo $row['name'];
     }
 } 
 catch(PDOException $e) {
     echo $e -> getMessage();
 }
-?>
 
+$jsonTable = json_encode($jsonTable);
 
-<script id="jsonTable" >
-<?php
-echo json_encode($jsonTable);
-?>
-</script>
-
-
-
-
-<?php
-insertTable(10);
-
-
-//close connection
-$conn = null;
 
 ?>
