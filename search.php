@@ -17,7 +17,14 @@ else {//note: without elif could cause unnecessary performance drops; here for "
 }
 
 //object type search
-
+if ($_GET["typeid"] != ""){
+    $query = $query. " AND Novae.type = :type";
+    $params[':type'] = $_GET["typeid"];
+}
+else if ($_GET["type"] != ""){
+    $query = $query." AND Novae.type LIKE CONCAT('%',:type,'%')";
+    $params[':type'] = $_GET["type"];
+}
 
 
 $jsonTable = array();
