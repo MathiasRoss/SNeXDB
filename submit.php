@@ -1,8 +1,21 @@
 <?php
-include 'config.php';
+include 'connect.php';
 
-//connect
-$conn = new mysqli($servername, $username, $password, $dbname) or die('Could not connect to database: '. $conn -> connect_error);
+
+//get menu information from database
+try {
+    $stmt = $conn->query("SELECT DISTINCT name FROM Novae");
+    $names = $stmt-> fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->query("SELECT DISTINCT type FROM Novae");
+    $types = $stmt-> fetchAll(PDO::FETCH_ASSOC);
+}
+catch(PDOException $e) {
+    echo $e->getMessage();
+}
+
+
+
+
 
 ?>
 
@@ -14,14 +27,8 @@ $conn = new mysqli($servername, $username, $password, $dbname) or die('Could not
 <option selected = "selected" value = "">Object Name</option>
 
 <?php
-//Query to get object names
-$query = "SELECT name FROM Novae";
-
-$names = $conn -> query($query);
-
-
 //Turn result into an associative array and loop, creating html code
-while($name = mysqli_fetch_array($names)){ 
+foreach($names as $name){ 
     echo  "<option>" . $name['name'] . "</option>";
 }
 ?>
@@ -58,11 +65,7 @@ while($name = mysqli_fetch_array($names)){
 <option selected = "selected" value = "">New Type</option>
 
 <?php
-$query = "SELECT type FROM Novae";
-
-$types = $conn -> query($query);
-
-while($type = mysqli_fetch_array($types)){
+foreach($types as $type){
     echo "<option>" . $type['type'] . "</option>";
 }
 ?>

@@ -1,3 +1,16 @@
+span.supsub {
+}
+span.supsub span.subscript {
+position:relative;  
+top: 0.5em;
+left: -0.5em;
+}
+span.supsub span.superscript {
+position:relative; 
+top: -0.5em;
+}
+
+
 table {
 overflow:auto;
 border-spacing: 0;
