@@ -1,5 +1,5 @@
 <?php
-
+include 'calculations.php';
 
 $uploaddir = '/var/www/uploads/';
 $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
@@ -16,24 +16,52 @@ print_r($_FILES);
 
 print "</pre>";
 
-$array = $fields = array();
+
+include 'connect.php';
+
+try {
+    $stmt = $conn-> query("SELECT DISTINCT name From Novae");
+    $names = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->query("SELECT DISTINCT type FROM Novae");
+    $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+catch (PDOException $e){
+    echo $e->getMessage();
+}
+
+//make 1d arrays from the 2d ones for ease of search:
+foreach($names as $key=>$name){
+    $names[] = $name['name'];
+    unset($names[$key]);
+}
+
+$result = $fields = array();
 $i = 0;
 if (($handle = fopen($uploadfile,"r")) !== false) {
     while (($row = fgetcsv($handle, 1000, ",")) !== false) {
         if (empty($fields)){
-            echo "beep";
             $fields = $row;
             continue;
-         }
-         foreach ($row as $key=>$value) {
-            $array[$i][$fields[$key]] = $value; 
-          }
-         $i++;
+        }
+        foreach ($row as $key=>$value) {
+            $result[$i][$fields[$key]] = $value; 
+        }
+        if (!in_array($result[$i]['name'], $names)) {
+            echo 'Detected New Nova: '. $result[$i]['name'];
+            echo "<br>";
+        } 
+        $i++;
     }
     fclose($handle);
 }
 
 
-print_r($array);
+
+
+
+
+include 'phpTable.php';
+
+
 
 ?>
