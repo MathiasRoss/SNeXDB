@@ -56,6 +56,7 @@ foreach($oldObs as $key=>$row){
 
 //prepare arrays for the new values
 $novae = array();
+$observations = array();
 $newNames = array();
 $newTypes = array();
 
@@ -78,6 +79,8 @@ if (($handle = fopen($uploadfile,"r")) !== false) {
             $result[$i]['dateObserved']=$oldObs[$result[$i]['obsID']]['dateObserved'];
             $result[$i]['dateObservedRef']=$oldObs[$result[$i]['obsID']]['dateObservedRef'];
             $result[$i]['instrument']=$oldObs[$result[$i]['obsID']]['instrument'];
+        } else {//record new observation info for display
+             $observations[]=$result[$i];//has excess info
         }
 
 
@@ -101,7 +104,7 @@ if (($handle = fopen($uploadfile,"r")) !== false) {
 }
 
 include 'novaeTable.php';
-
+include 'obsTable.php';
 $novae = array_merge($novae,$oldNovae);
 
 //fill in missing nova information
