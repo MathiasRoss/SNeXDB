@@ -1,4 +1,7 @@
 <?php
+//This file loads way more into memory than necessary
+//In case of slowdowns, may become necessary to add separate queries
+
 include 'calculations.php';
 
 $uploaddir = '/var/www/uploads/';
@@ -22,12 +25,15 @@ include 'connect.php';
 try {
     $stmt = $conn-> query("SELECT * From Novae");
     $oldNovae = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-    $stmt = $conn->query("SELECT DISTINCT type FROM Novae");
-    $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->query("SELECT * FROM Observations");
+    $oldObs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 catch (PDOException $e){
     echo $e->getMessage();
 }
+$names = array();
+$types = array();
+
 
 //make 1d arrays from the 2d ones for ease of search:
 foreach($oldNovae as $key=>$row){
@@ -38,9 +44,15 @@ foreach($oldNovae as $key=>$row){
         $names[] = $row['name'];
     }
     if (!in_array($row['type'], $types)){
-        $types = $row['type'];
+        $types[] = $row['type'];
     }
 }
+
+foreach($oldObs as $key=>$row){
+    $oldObs[$row['obsID']]=$row;
+    unset($oldObs[$key]);
+}
+
 
 //prepare arrays for the new values
 $novae = array();
@@ -60,6 +72,16 @@ if (($handle = fopen($uploadfile,"r")) !== false) {
         foreach ($row as $key=>$value) {
             $result[$i][$fields[$key]] = $value; 
         }
+//check for an observation id, in case adding to existing observation
+        if (!empty($result[$i]['obsID'])){
+            $result[$i]['name']=$oldObs[$result[$i]['obsID']]['name'];
+            $result[$i]['dateObserved']=$oldObs[$result[$i]['obsID']]['dateObserved'];
+            $result[$i]['dateObservedRef']=$oldObs[$result[$i]['obsID']]['dateObservedRef'];
+            $result[$i]['instrument']=$oldObs[$result[$i]['obsID']]['instrument'];
+        }
+
+
+
 
 //check for new novae included in the file, fill $novae with the new nova information
         if ((!in_array($result[$i]['name'], $names)) && !in_array($result[$i]['name'], $newNames)) {
@@ -101,7 +123,6 @@ foreach ($result as $key=>$row){
         $result[$key]['distRef'] = $novae[$row['name']]['distRef'];
     }
 }
-
 
 
 
