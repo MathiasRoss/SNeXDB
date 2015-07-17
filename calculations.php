@@ -14,7 +14,9 @@ function mpctocm($distance){
 
 function getPrecision($error)
 {
-    return strlen(substr(strrchr(trim($error),'.'),1));
+    $prec = strlen(substr(strrchr(trim($error),'.'),1));
+    if ($prec > 1) {return $prec;}
+    else{return 2;}
 }
 
 

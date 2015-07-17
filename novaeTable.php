@@ -4,7 +4,8 @@
 <th>Type</th>
 <th>Date Exploded</th>
 <th>Distance</th>
-<th>Reference</th>
+<th>Distance Reference</th>
+<th>Date Reference</th>
 </tr>
 
 <?php
@@ -16,6 +17,7 @@ foreach ($novae as $row) {
 <td> <?php echo removeZeros($row['dateExploded'],0);?></td>
 <td> <?php echo removeZeros($row['distance'],2); ?></td>
 <td> <?php echo refLink($row['distRef']) ?></td>
+<td> <?php echo refLink($row['dateExplodedRef']) ?></td>
 </tr>
 <?php
 }

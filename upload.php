@@ -1,3 +1,7 @@
+
+<head>
+<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+</head>
 <?php
 //This file loads way more into memory than necessary
 //In case of slowdowns, may become necessary to add separate queries
@@ -18,8 +22,17 @@ echo 'Here is some more debugging info:';
 print_r($_FILES);
 
 print "</pre>";
+?>
+<form method ="post" action="updateFromFile.php">
+<input type="hidden" name="uploadfile" value="<?php echo $uploadfile; ?>">
+<input type="submit" value="modify database">
+
+</form>
 
 
+
+
+<?php
 include 'connect.php';
 
 try {
@@ -35,7 +48,7 @@ $names = array();
 $types = array();
 
 
-//make 1d arrays from the 2d ones for ease of search:
+//change the array keys to the natural ones for ease of search:
 foreach($oldNovae as $key=>$row){
     $oldNovae[$row['name']]=$row;
     unset($oldNovae[$key]);
@@ -50,7 +63,7 @@ foreach($oldNovae as $key=>$row){
 
 foreach($oldObs as $key=>$row){
     $oldObs[$row['obsID']]=$row;
-    unset($oldObs[$key]);
+//    unset($oldObs[$key]);//commented because $oldObs was being created with correct ids, and this was just unsetting them.
 }
 
 
@@ -125,6 +138,11 @@ foreach ($result as $key=>$row){
     if (empty($result[$key]['distRef'])){
         $result[$key]['distRef'] = $novae[$row['name']]['distRef'];
     }
+    $result[$key]['lum'] = getLum($result[$key]['distance'],$result[$key]['flux']);
+    $lumErrMag = floor(log10($result[$key]['lum']*$row['fluxErrL']/$row['flux']));
+    $result[$key]['lum'] = round($result[$key]['lum']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
+    $result[$key]['lum'] = $result[$key]['lum']*pow(10,-37);
+
 }
 
 
