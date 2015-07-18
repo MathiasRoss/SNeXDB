@@ -9,7 +9,7 @@ include 'search.php';
 include 'exportButton.php';
 
 include 'phpTable.php';
-
+include 'plot.php';
 
 $conn = null;
 ?>
