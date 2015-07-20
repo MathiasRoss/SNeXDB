@@ -8,6 +8,8 @@ include 'searchForm.php';
 include 'search.php';
 include 'exportButton.php';
 
+include 'table.php';
+
 include 'phpTable.php';
 include 'plot.php';
 

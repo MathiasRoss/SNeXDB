@@ -1,6 +1,3 @@
-
-
-
 <table style='white-space:nowrap;table-layout:fixed'>
 <tr>
 <th>Name</th>

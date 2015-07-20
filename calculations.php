@@ -32,6 +32,10 @@ function getLum($distance,$flux){
     return 4.*3.159265*mpctocm($distance)*mpctocm($distance)*$flux*pow(10,-13);
 }   
 
+function getLumErr($lum,$flux,$fluxErr){
+    return $lum*($fluxErr/$flux);
+}
+
 function refLink($ref){
     $link = "<a href=\"http://adsabs.harvard.edu/abs/". $ref ."\">".$ref."</a>";
     return $link;
