@@ -12,7 +12,7 @@ foreach($result as $row){
 ?>
 ];
     var options = { 
-            series: {lines:{show:false},points:{show:true}},
+            series: {lines:{show:true},points:{show:true}},
 };
    $.plot($("#placeholder"),[{data:d1}],options);
 });
