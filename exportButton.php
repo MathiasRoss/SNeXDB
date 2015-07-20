@@ -1,11 +1,11 @@
-<button id = 'Export' onclick="showOptions()">Export&nbspResults</button>
+<!--<button id = 'Export' onclick="showOptions()">Export&nbspResults</button>
 
 
 
-<div id = exportPopup>
+<div id = exportPopup>-->
 <form method="get" action= "export.php">
 
-<select id='exportType'>
+<select name='exportType'>
 <option value='TSV'>TSV</option>
 <option value='CSV'>CSV</option>
 </select>
@@ -20,7 +20,7 @@
 <input type="hidden" name = "typeMax" value = <?php $_GET['lumMax']; ?>>
 <input type = "submit" value = "Export Results">
 </form>
-</div>
+<!--</div>
 
 <style>
 #exportPopup {
@@ -38,4 +38,4 @@ background-color: rgba(123,123,123,0.8);
 function showOptions(){
 $('#exportPopup').show();
 }
-</script>
+</script>-->

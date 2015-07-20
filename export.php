@@ -3,6 +3,7 @@ include 'connect.php';
 include 'calculations.php';
 include 'search.php';
 
+
 switch($_GET['exportType']){
     case 'CSV':
         $sep = ',';
@@ -11,11 +12,20 @@ switch($_GET['exportType']){
         $sep = "\t";
         break;
 }
+$fields = array_keys($result[0]);
+foreach($fields as $field){
+    $string = $string . "\"".$field."\"";
+    $string = $string . $sep;
+}
+$string = $string . "\n";
 
 
-$string = "\"obsID\"".$sep." \"name\"".$sep." \"type\"".$sep."\"dateExploded\"".$sep."\"distance\"".$sep." \"age\"".$sep." \"dateObserved\"".$sep." \"instrument\"".$sep." \"flux\"".$sep." \"fluxErrL\"".$sep."\"fluxErrH\"".$sep."\"fluxEnergyL\"".$sep."\"fluxEnergyH\"".$sep."\"model\"".$sep."\"lum\"".$sep." \"fluxRef\"".$sep."\"dateObservedRef\"".$sep."\"dateExplodedRef\"".$sep."\"distRef\" \n";
 foreach($result as $value){
-    $string = $string . $value["obsID"] .','. $value["name"] . ",". $value["type"] . "," . $value['dateExploded'].','.$value['distance'].$value['age'] . "," . $value['dateObserved'].','.$value['instrument'].','.$value["flux"] . ",". $value['fluxErrL'].','.$value['fluxErrH'].','.$value['fluxEnergyL'].','.$value['fluxEnergyH'].','.$value['model'].','.$value["lum"] . ','.$value['fluxRef'].','.$value['dateObservedRef'].','.$value['dateExplodedRef'].','.$value['distRef']."\n";  
+    foreach($fields as $field){
+        $string = $string . $value[$field] . $sep;
+    }
+    $string = $string . "\n";
+
 }
 header('content-type: text/csv');
 header('content-disposition: attachment; filename="SNeXDB.csv"');
