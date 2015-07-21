@@ -17,20 +17,39 @@ array_multisort($age, SORT_ASC, $lum, $result);
 
 
 $( document ).ready(function() {
+
+    var points = {errorbars:"y",yerr:{show:true, upperCap: "-", lowerCap: "-", radius:5}};
 <?php
+$data = 'var data = [';
 $i = 1;
 foreach($novae as $nova)
 {
-echo 'var d'.$i.'=';
-foreach($result as $row){
-    echo '['.$row['age'].','.$row['lum'].','.getLumErr($row['lum'],$row['flux'],$row['fluxErrL']).'],';
+    $age=array();
+    $lum=array();
+    //sort by age for the plot
+    foreach($observations[$nova['name']] as $key=>$row){
+        $age[$key] = $row['age'];
+        $lum[$key] = $row['lum'];
+    }
+
+    array_multisort($age, SORT_ASC, $lum, $observations[$nova['name']]);
+
+
+    echo 'var d'.$i.'=[';
+    foreach($observations[$nova['name']] as $obs){
+        echo '['.$obs['age'].','.$obs['lum'].','.getLumErr($obs['lum'],$obs['flux'],$obs['fluxErrL']).'],';
+    }
+    echo '];';  
+    $data = $data."{label:'".$nova['name']."', points:points, data:d".$i.'},';
+
+    $i++;
 }
+$data = $data.'];';
+echo $data;
 ?>
-];
-    var d1_points = {errorbars:"y",yerr:{show:true, upperCap: "-", lowerCap: "-", radius:5}};
-    var data = [{points:d1_points, data:d1}];
+
     var options = { 
-            series: {lines:{show:true},points:{show:true}},
+            series: {lines:{show:true},points:{show:true}}
 };
    $.plot($("#placeholder"),data,options);
 });

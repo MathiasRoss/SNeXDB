@@ -27,8 +27,8 @@ foreach($result as $value){
     $string = $string . "\n";
 
 }
-header('content-type: text/csv');
-header('content-disposition: attachment; filename="SNeXDB.csv"');
+header('content-type: text/'.$_GET['exportType']);
+header('content-disposition: attachment; filename="SNeXDB.'.$_GET['exportType']."\"");
 header("content-length: " . mb_strlen($string));
 header("Connection: close");
 print $string;
