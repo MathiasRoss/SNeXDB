@@ -17,7 +17,11 @@ array_multisort($age, SORT_ASC, $lum, $result);
 
 
 $( document ).ready(function() {
-var d1 = [<?php
+<?php
+$i = 1;
+foreach($novae as $nova)
+{
+echo 'var d'.$i.'=';
 foreach($result as $row){
     echo '['.$row['age'].','.$row['lum'].','.getLumErr($row['lum'],$row['flux'],$row['fluxErrL']).'],';
 }

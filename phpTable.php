@@ -1,4 +1,5 @@
-<table style='white-space:nowrap;table-layout:fixed'>
+<table id="primary" class="display" style='white-space:nowrap;table-layout:fixed'>
+
 <tr>
 <th>Name</th>
 <th>Type</th>
@@ -48,3 +49,13 @@ foreach ($result as $row){
 
 ?>
 </table>
+
+
+
+<script>
+$(document).ready(function() {
+    $('#primary').dataTable();
+} );
+</script>
+
+
