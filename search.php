@@ -50,7 +50,7 @@ catch(PDOException $e) {
     echo $e -> getMessage();
 }
 
-
+$novae=array();
 
 foreach($result as $key => $row){
 //calculate values
@@ -78,6 +78,16 @@ foreach($result as $key => $row){
     $result[$key]['dateObserved']=removeZeros($row['dateObserved'],0);
     $result[$key]['fluxEnergyL']=removeZeros($row['fluxEnergyL'],getPrecision($row['fluxEnergyL']));
     $result[$key]['fluxEnergyH']=removeZeros($row['fluxEnergyH'],getPrecision($row['fluxEnergyH']));
+
+    if (empty($novae[$row['name']])){
+        $novae[$row['name']]['type']=$result[$key]['type'];
+        $novae[$row['name']]['dateExploded']=$result[$key]['dateExploded']; 
+        $novae[$row['name']]['distance']=$result[$key]['distance'];
+        $novae[$row['name']]['distRef']=$result[$key]['distRef'];
+        $novae[$row['name']]['dateExplodedRef']=$result[$key]['dateExplodedRef'];
+    }
+    $observations[$row['name']][]=$result[$key];
+
 }
 
 

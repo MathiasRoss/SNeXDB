@@ -1,6 +1,3 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="flot/jquery.flot.js"></script>
-<script src="flot/jquery.flot.errorbars.js"></script>
 <div id="placeholder" style="width:600px;height:300px"></div>
 <script>
 <?php

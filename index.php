@@ -15,6 +15,7 @@ include 'table.php';
 //echo "Table 2:
 //<br>";
 //include 'phpTable.php';
+
 include 'plot.php';
 
 $conn = null;
