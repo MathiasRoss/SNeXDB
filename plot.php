@@ -19,25 +19,25 @@ $( document ).ready(function() {
 <?php
 $data = 'var data = [';
 $i = 1;
-foreach($novae as $nova)
+foreach($novae as $name=>$nova)
 {
     $age=array();
     $lum=array();
     //sort by age for the plot
-    foreach($observations[$nova['name']] as $key=>$row){
-        $age[$key] = $row['age'];
-        $lum[$key] = $row['lum'];
+    foreach($observations[$name] as $key=>$row){
+        $age[] = $row['age'];
+        $lum[] = $row['lum'];
     }
 
-    array_multisort($age, SORT_ASC, $lum, $observations[$nova['name']]);
+    array_multisort($age, SORT_ASC, $lum, $observations[$name]);
 
 
     echo 'var d'.$i.'=[';
-    foreach($observations[$nova['name']] as $obs){
+    foreach($observations[$name] as $obs){
         echo '['.$obs['age'].','.$obs['lum'].','.getLumErr($obs['lum'],$obs['flux'],$obs['fluxErrL']).'],';
     }
     echo '];';  
-    $data = $data."{label:'".$nova['name']."', points:points, data:d".$i.'},';
+    $data = $data."{label:'".$name."', points:points, data:d".$i.'},';
 
     $i++;
 }

@@ -47,9 +47,9 @@ foreach($observations[$name] as $obs){
 <tr>
 <td> <?php echo $obs['obsID'];?></td>
 <td> <?php echo $obs['dateObserved'];?></td>
-<td> <?php echo getAge($obs['dateObserved'],$obs['dateExploded']);?> </td>
+<td> <?php echo $obs['age'];?> </td>
 <td> <?php echo $obs['instrument'];?></td>
-<td><?php echo removeZeros($obs['flux'],getPrecision($obs['fluxErrL'])); ?>
+<td><?php echo $obs['flux']; ?>
 <span class='supsub'>
 <sup class = 'superscript'>+<?php echo removeZeros($obs['fluxErrH'],getPrecision($obs['fluxErrH'])); ?></sup>
 <sub class = 'subscript'>-<?php echo removeZeros($obs['fluxErrL'],getPrecision($obs['fluxErrL'])); ?></sub>
