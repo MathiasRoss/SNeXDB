@@ -99,7 +99,7 @@ foreach($result as $key => $row){
 
 
 
-$jsonTable = json_encode($jsonTable);
+$jsonTable = json_encode($result);
 
 
 ?>

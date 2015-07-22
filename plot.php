@@ -8,6 +8,21 @@ $( document ).ready(function() {
 
 
 <?php
+//print the javascript object with age, lum, and lum err
+$jsTable = '{';
+foreach ($result as $key=>$row) {
+    $jsTable = $jsTable.$row['fitsID'].':{';
+    $jsTable = $jsTable.'age:'.$row['age'].',';
+    $jsTable = $jsTable.'lum:'.$row['lum'].',';
+    $jsTable = $jsTable.'lumErr:'.$row['lumErr'];
+    $jsTable = $jsTable.'},';
+}
+$jsTable = $jsTable.'};';
+echo 'var jsTable = '.$jsTable;
+
+
+
+
 //sort by age for the plot
 foreach($result as $key=>$row){
     $age[$key] = $row['age'];
@@ -66,19 +81,22 @@ echo $data;
 
 });
 
+//alert(jsTable[1].age);
+
+
 $('.test').on('click', function() {
     var newArray = [];
     $(".selected").each(function () {
-        var row = []
-        row[0] = parseFloat($(this).find('td.age').html());
-        row[1] = parseFloat($(this).find('td.lum').html());
+        var row = [];
+        row[0] = jsTable[$(this).attr('id')].age;
+        row[1] = jsTable[$(this).attr('id')].lum;
+        row[2] = jsTable[$(this).attr('id')].lumErr;
         newArray.push(row);
 });
-    alert(newArray);
-//   plot.setData(newArray);
-//   plot.setupGrid();
-//   plot.draw();
-     $.plot($("#placeholder"),[{data:newArray}],options);
+   data = [{data:newArray, points:points}];
+   plot.setData(data);
+   plot.setupGrid();
+   plot.draw();
 });
 
 

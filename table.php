@@ -45,7 +45,7 @@ Click to show/hide details.
 <?php
 foreach($observations[$name] as $obs){ 
 ?>
-<tr>
+<tr id=<?php echo $obs['fitsID'];?>>
 <td> <?php echo $obs['obsID'];?></td>
 <td> <?php echo $obs['dateObserved'];?></td>
 <td class='age'> <?php echo $obs['age'];?> </td>
