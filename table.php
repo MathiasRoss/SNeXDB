@@ -37,6 +37,7 @@ Click to show/hide details.
 <th>Flux</th>
 <th>Flux Energy Range</th>
 <th>Luminosity</th>
+<th>LuminosityError</th>
 <th>Model</th>
 <th>Flux Reference</th>
 <th>Observation Reference</th>
@@ -47,7 +48,7 @@ foreach($observations[$name] as $obs){
 <tr>
 <td> <?php echo $obs['obsID'];?></td>
 <td> <?php echo $obs['dateObserved'];?></td>
-<td> <?php echo $obs['age'];?> </td>
+<td class='age'> <?php echo $obs['age'];?> </td>
 <td> <?php echo $obs['instrument'];?></td>
 <td><?php echo $obs['flux']; ?>
 <span class='supsub'>
@@ -56,7 +57,8 @@ foreach($observations[$name] as $obs){
 </span>
 </td>
 <td> <?php echo $obs['fluxEnergyL'].' - '.$obs['fluxEnergyH']; ?></td>
-<td> <?php echo $obs['lum']; ?></td>
+<td class='lum'> <?php echo $obs['lum']; ?></td>
+<td> <?php echo $obs['lumErr']; ?></td>
 <td> <?php echo $obs['model']; ?></td>
 <td> <?php echo refLink($obs['fluxRef']) ?></td>
 <td> <?php echo refLink($obs['dateObservedRef']) ?></td>

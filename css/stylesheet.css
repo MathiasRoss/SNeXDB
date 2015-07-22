@@ -1,3 +1,7 @@
+.selected {
+background-color: SkyBlue;
+}
+
 table.detailsTable {
 font-size:.8em;
 }
@@ -30,4 +34,4 @@ font-weight: bold;
 border:1px solid #000000;
 text-align: center;
 }
-tr:nth-child(even) td {background:#F1F1F1;}
+/*tr:nth-child(even) td {background:#F1F1F1;}*/

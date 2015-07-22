@@ -29,7 +29,7 @@ function removeZeros($value,$precision){
 function getLum($distance,$flux){
 //    $distance = $distance*3.08567758*pow(10,18); //conversion from Mparsecs to cm
 //    $flux = $flux*pow(10,-13);//flux stored in this order
-    return 4.*3.159265*mpctocm($distance)*mpctocm($distance)*$flux*pow(10,-13);
+    return 4.*3.14159265*mpctocm($distance)*mpctocm($distance)*$flux*pow(10,-13);
 }   
 
 function getLumErr($lum,$flux,$fluxErr){

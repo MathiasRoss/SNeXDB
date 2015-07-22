@@ -53,13 +53,19 @@ catch(PDOException $e) {
 $novae=array();
 
 foreach($result as $key => $row){
-//calculate values
+//calculate age and luminosity
     $result[$key]['age']=getAge($row['dateObserved'],$row['dateExploded']);
+
     $result[$key]['lum'] = getLum($row['distance'],$row['flux']);
-    $lumErrMag = floor(log10($result[$key]['lum']*$row['fluxErrL']/$row['flux']));
+    $result[$key]['lumErr'] = getLumErr($result[$key]['lum'],$row['flux'],$row['fluxErrL']);
+
+//fix the magnitudes and misleading digits
+    $lumErrMag = floor(log10($result[$key]['lumErr']));
     $result[$key]['lum'] = round($result[$key]['lum']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
     $result[$key]['lum'] = $result[$key]['lum']*pow(10,-37);
-
+    $result[$key]['lumErr']=round($result[$key]['lumErr']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
+    $result[$key]['lumErr']=$result[$key]['lumErr']*pow(10,-37);
+    
 
 //check to see if within lum search
     if ($_GET['lumMin'] != "" and $_GET['lumMin']>= $result[$key]['lum']){
@@ -71,6 +77,7 @@ foreach($result as $key => $row){
         continue;
     }
  
+
 
 
 //remove excess zeros, using uncertainty values where available
