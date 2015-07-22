@@ -134,9 +134,10 @@ $('#newData').on('click', function() {
         row[2] = jsTable[$(this).attr('id')].lumErr;
         dataObj[name].push(row);
 });
-   console.log(dataObj);
+
    obj = [];
    for (var i = 0; i<names.length; i++){
+       dataObj[names[i]].sort(function(a,b) {return a[0]-b[0];});
        obj = {data:dataObj[names[i]],points:points,label:names[i]};
        console.log(obj);
        data.push(obj);
