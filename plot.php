@@ -1,6 +1,12 @@
-<div id="placeholder" style="width:600px;height:300px"></div>
+<button id="newData">Update Data</button>
 
-<button class="Test">Test</button>
+<div id="placeholder" style="width:600px;height:300px"></div>
+x min:<input type='text' id='xAxisMin'>
+x max:<input type='text' id='xAxisMax'>
+y min:<input type='text' id='yAxisMin'>
+y max:<input type='text' id='yAxisMax'>
+
+<button id="update">Update Plot</button>
 
 
 <script>
@@ -10,12 +16,15 @@ $( document ).ready(function() {
 <?php
 //print the javascript object with age, lum, and lum err
 $jsTable = '{';
-foreach ($result as $key=>$row) {
-    $jsTable = $jsTable.$row['fitsID'].':{';
-    $jsTable = $jsTable.'age:'.$row['age'].',';
-    $jsTable = $jsTable.'lum:'.$row['lum'].',';
-    $jsTable = $jsTable.'lumErr:'.$row['lumErr'];
-    $jsTable = $jsTable.'},';
+foreach ($observations as $name=>$row) {
+    foreach($row as $obs){
+        $jsTable = $jsTable.$obs['fitsID'].':{';
+        $jsTable = $jsTable."name:'".$name."',";
+        $jsTable = $jsTable.'age:'.$obs['age'].',';
+        $jsTable = $jsTable.'lum:'.$obs['lum'].',';
+        $jsTable = $jsTable.'lumErr:'.$obs['lumErr'];
+        $jsTable = $jsTable.'},';
+    }
 }
 $jsTable = $jsTable.'};';
 echo 'var jsTable = '.$jsTable;
@@ -69,37 +78,73 @@ echo $data;
     var options = { 
             series: {lines:{show:true},points:{show:true}}
 };
-    var plot =  $.plot($("#placeholder"),data,options);
 
-    $(".detailsTable tr").click(function(){
+
+//actually plot
+var plot =  $.plot($("#placeholder"),data,options);
+var axes = plot.getAxes();
+
+//print initial axes limits
+$('#xAxisMin').val(axes.xaxis.min);
+$('#xAxisMax').val(axes.xaxis.max);
+$('#yAxisMin').val(axes.yaxis.min);
+$('#yAxisMax').val(axes.yaxis.max);
+
+//update axes on click
+$('#update').click(function(){
+    plot.getAxes().xaxis.options.min = $('#xAxisMin').val();
+    plot.getAxes().xaxis.options.max = $('#xAxisMax').val();
+    plot.getAxes().yaxis.options.min = $('#yAxisMin').val();
+    plot.getAxes().yaxis.options.max = $('#yAxisMax').val();
+    plot.setupGrid();
+    plot.draw();
+});
+
+
+//toggle selected classes
+$(".detailsTable tr").click(function(){
         if ($(this).attr('class')!='selected') {
             $(this).addClass('selected');
         } else{
             $(this).removeClass('selected');
 
    }
-
+ 
 });
 
-//alert(jsTable[1].age);
 
-
-$('.test').on('click', function() {
+//Get selected data
+$('#newData').on('click', function() {
+    var data = [];
+    var names = [];
+    var dataObj = {};
     var newArray = [];
     $(".selected").each(function () {
+        name = jsTable[$(this).attr('id')].name;
+        age = jsTable[$(this).attr('id')].age;
+        lum = jsTable[$(this).attr('id')].lum;
+        lumErr = jsTable[$(this).attr('id')].lumErr;
+        if(names.indexOf(name) == -1){
+            names.push(name);
+            dataObj[name] = [];
+        }
         var row = [];
         row[0] = jsTable[$(this).attr('id')].age;
         row[1] = jsTable[$(this).attr('id')].lum;
         row[2] = jsTable[$(this).attr('id')].lumErr;
-        newArray.push(row);
+        dataObj[name].push(row);
 });
-   data = [{data:newArray, points:points}];
+   console.log(dataObj);
+   obj = [];
+   for (var i = 0; i<names.length; i++){
+       obj = {data:dataObj[names[i]],points:points,label:names[i]};
+       console.log(obj);
+       data.push(obj);
+}
    plot.setData(data);
    plot.setupGrid();
    plot.draw();
 });
 
-
 });
 </script>
-
