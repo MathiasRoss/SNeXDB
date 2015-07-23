@@ -1,3 +1,24 @@
+div#graphWrapper {
+height:300px;
+width:100%;
+margin:auto;
+}
+div#graphInnerWrapper {
+text-align:center;
+width: 50%;
+height: 300px;
+float: left;
+}
+div#graph{
+width:100%;
+height:90%;
+}
+div#graphOptions{
+    margin-left: 50%;
+    height: 300px;
+}
+
+
 .selected {
 background-color: SkyBlue;
 }

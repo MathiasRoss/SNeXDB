@@ -15,8 +15,8 @@ include 'table.php';
 //echo "Table 2:
 //<br>";
 //include 'phpTable.php';
-
-include 'plot.php';
-
+if($_GET["graph"]!='on'){
+    include 'plot.php';
+}
 $conn = null;
 ?>

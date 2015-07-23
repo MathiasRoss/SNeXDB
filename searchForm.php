@@ -81,6 +81,8 @@ echo $_GET["lumMax"];
 
 <input type = "submit" value = "Search">
 
+<br>
+Disable graphing?<input type ="checkbox" name="graph">
 
 
 </form>

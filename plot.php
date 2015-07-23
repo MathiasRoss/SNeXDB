@@ -1,12 +1,19 @@
 <button id="newData">Update Data</button>
 
-<div id="placeholder" style="width:600px;height:300px"></div>
-x min:<input type='text' id='xAxisMin'>
-x max:<input type='text' id='xAxisMax'>
-y min:<input type='text' id='yAxisMin'>
-y max:<input type='text' id='yAxisMax'>
-
+<div id ='graphWrapper'>
+<div id ='graphInnerWrapper'>
+Age vs. Luminosity
+<div id="graph"></div>
+</div>
+<div id = 'graphOptions'>
+x min:<input type='text' id='xAxisMin'><br>
+x max:<input type='text' id='xAxisMax'><br>
+y min:<input type='text' id='yAxisMin'><br>
+y max:<input type='text' id='yAxisMax'><br>
 <button id="update">Update Plot</button>
+</div>
+</div>
+
 
 
 <script>
@@ -76,12 +83,15 @@ echo $data;
 ?>
 
     var options = { 
-            series: {lines:{show:true},points:{show:true}}
+            series: {lines:{show:true},points:{show:true}},
+            axisLabels:{show:true},
+            xaxes:[{axisLabel:'Age (days)'}],
+            yaxes:[{axisLabel:'Luminosity'}]
 };
 
 
 //actually plot
-var plot =  $.plot($("#placeholder"),data,options);
+var plot =  $.plot($("#graph"),data,options);
 var axes = plot.getAxes();
 
 //print initial axes limits
