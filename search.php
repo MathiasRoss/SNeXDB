@@ -26,6 +26,17 @@ else if ($_GET["type"] != ""){
     $params[':type'] = $_GET["type"];
 }
 
+//instrument search
+if ($_GET['instrumentid'] != ""){
+    $query = $query."AND Observations.instrument = :instrument";
+    $params[':instrument'] = $_GET['instrumentid'];
+}
+else if ($_GET['instrument'] != ""){
+    $query = $query."AND Observations.instrument LIKE CONCAT('%',:instrument,'%')";
+    $params[':instrument'] = $_GET['instrument'];
+}
+
+
 //flux search
 if ($_GET['fluxMin'] != ""){
     $query = $query . " AND flux >= :fluxMin";

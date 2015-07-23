@@ -8,6 +8,8 @@ try {
     $names = $stmt-> fetchAll(PDO::FETCH_ASSOC);
     $stmt = $conn->query("SELECT DISTINCT type FROM Novae");
     $types = $stmt-> fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->query("SELECT DISTINCT instrument FROM Observations");
+    $instruments = $stmt-> fetchAll(PDO::FETCH_ASSOC);
 }
 catch(PDOException $e) {
     echo $e->getMessage();
@@ -75,6 +77,20 @@ and less than
 echo $_GET["lumMax"];
 ?>
 >
+<br>
+
+<!-- Instrument name pulldown -->
+<select name="instrumentid">
+<option selected ="selected" value = "">Instrument</option>
+
+<?php
+foreach($instruments as $key=>$instrument){
+    echo "<option>" . $instrument['instrument'] . "</option>";
+}
+?>
+</select>
+<input type="text" name = "instrument" >
+<br>
 
 
 
@@ -82,7 +98,12 @@ echo $_GET["lumMax"];
 <input type = "submit" value = "Search">
 
 <br>
-Disable graphing?<input type ="checkbox" name="graph">
+
+
+
+
+
+Disable graphing?<input type ="checkbox" name="graph" <?php if($_GET['graph']=='on'){echo 'checked';}?>>
 
 
 </form>
