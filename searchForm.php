@@ -95,16 +95,29 @@ foreach($instruments as $key=>$instrument){
 
 
 
-<input type = "submit" value = "Search">
 
 <br>
 
-
-
+<!-- Age Search -->
+Older than
+<input type="text" name="ageMin" value=
+<?php
+echo $_GET["ageMin"];
+?> 
+>
+and younger than
+<input type="text" name="ageMax" value=
+<?php
+echo $_GET["ageMax"];
+?>
+>
+(days)
+<br>
 
 
 Disable graphing?<input type ="checkbox" name="graph" <?php if($_GET['graph']=='on'){echo 'checked';}?>>
 
+<input type = "submit" value = "Search">
 
 </form>
 

@@ -87,7 +87,15 @@ foreach($result as $key => $row){
         unset($result[$key]);
         continue;
     }
- 
+//check to see if within age search
+    if ($_GET['ageMin'] != "" and $_GET['ageMin']>= $result[$key]['age']){
+        unset($result[$key]);
+        continue;
+    }
+    if($_GET['ageMax'] != "" and $_GET['ageMax']<= $result[$key]['age']){
+        unset($result[$key]);
+        continue;
+    }
 
 
 
@@ -97,6 +105,23 @@ foreach($result as $key => $row){
     $result[$key]['fluxEnergyL']=removeZeros($row['fluxEnergyL'],getPrecision($row['fluxEnergyL']));
     $result[$key]['fluxEnergyH']=removeZeros($row['fluxEnergyH'],getPrecision($row['fluxEnergyH']));
 
+
+
+/*
+//experimental magnitude reconvert:
+    $result[$key]['flux']=$result[$key]['flux']*pow(10,-13);
+    $result[$key]['fluxErrL']=$result[$key]['fluxErrL']*pow(10,-13);
+    $result[$key]['fluxErrH']=$result[$key]['fluxErrH']*pow(10,-13);
+    $result[$key]['lum']=$result[$key]['lum']*pow(10,37);
+    $result[$key]['lumErr']=$result[$key]['lumErr']*pow(10,37);
+*/
+
+
+
+
+
+
+
     if (empty($novae[$row['name']])){
         $novae[$row['name']]['type']=$result[$key]['type'];
         $novae[$row['name']]['dateExploded']=$result[$key]['dateExploded']; 
@@ -105,6 +130,7 @@ foreach($result as $key => $row){
         $novae[$row['name']]['dateExplodedRef']=$result[$key]['dateExplodedRef'];
     }
     $observations[$row['name']][]=$result[$key];
+
 
 }
 
