@@ -3,8 +3,8 @@
 <tr>
 <th>Name</th>
 <th>Type</th>
-<th>Date Exploded</th>
-<th>Distance</th>
+<th>Date Exploded (MJD)</th>
+<th>Distance (Mpc)</th>
 <th>Distance Reference</th>
 <th>Date Reference</th>
 </tr>
@@ -27,16 +27,16 @@ Click to show/hide details.
 </a>
 
 
-<div id = '<?php echo $name;?>' style="display:none;" >
+<div id = '<?php echo $name;?>' style="display:block;" >
 <table class="detailsTable" style='white-space:nowrap;table-layout:fixed'>
 <tr>
 <th>Observation ID</th>
-<th>Date Observed</th>
-<th>Age</th>
+<th>Date Observed (MJD)</th>
+<th>Age (days)</th>
 <th>Instrument</th>
-<th>Flux</th>
-<th>Flux Energy Range</th>
-<th>Luminosity</th>
+<th>Flux (x 10<sup>-13</sup> erg cm<sup>-2</sup> s<sup>-1</sup>)</th>
+<th>Flux Energy Range (KeV)</th>
+<th>Luminosity (x 10<sup>37</sup> erg s<sup>-1</sup>)</th>
 <th>Model</th>
 <th>Flux Reference</th>
 <th>Observation Reference</th>
