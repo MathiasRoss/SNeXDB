@@ -1,13 +1,10 @@
-
-<head>
-<link rel="stylesheet" type="text/css" href="css/stylesheet.css">
-</head>
 <?php
 //This file loads way more into memory than necessary
 //In case of slowdowns, may become necessary to add separate queries
-
+include 'header.php';
 include 'calculations.php';
-
+include 'uploadButton.php';
+/*
 $uploaddir = '/var/www/uploads/';
 $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
 
@@ -23,8 +20,9 @@ print_r($_FILES);
 
 print "</pre>";
 ?>
-<form method ="post" action="updateFromFile.php">
-<input type="hidden" name="uploadfile" value="<?php echo $uploadfile; ?>">
+<form method ="post" action="upload.php">
+<input type="hidden" name="uploadfile" value="<?php echo $_POST['userfile']; ?>">
+<input type="hidden" name="MAX_FILE_SIZE" value="30000" >
 <input type="submit" value="modify database">
 
 </form>
@@ -33,7 +31,7 @@ print "</pre>";
 
 
 <?php
-include 'connect.php';
+*/include 'connect.php';
 
 try {
     $stmt = $conn-> query("SELECT * From Novae");
@@ -76,7 +74,7 @@ $newTypes = array();
 //Loops through each row in the file, creating an associative array $result with all the new information
 $result = $fields = array();
 $i = 0;
-if (($handle = fopen($uploadfile,"r")) !== false) {
+if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
     while (($row = fgetcsv($handle, 1000, ",")) !== false) {
         if (empty($fields)){ //set $fields array to the first row, to be used as keys in $result
             $fields = $row;

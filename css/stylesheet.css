@@ -25,21 +25,27 @@ background-color: SkyBlue;
 
 table.detailsTable {
 font-size:.8em;
+margin-left:1%;
 }
 
-
+/*
 span.supsub {
+position:absolute;
 }
 span.supsub span.subscript {
-position:relative;  
+display:block;
+position:relative;
+font-size:0.5em;  
 top: 0.5em;
 left: -0.5em;
 }
 span.supsub span.superscript {
+display:block;
 position:relative; 
-top: -0.5em;
+font-size:0.5em;  
+left: -0.5em;
 }
-
+*/
 
 table {
 overflow:auto;
@@ -55,4 +61,4 @@ font-weight: bold;
 border:1px solid #000000;
 text-align: center;
 }
-/*tr:nth-child(even) td {background:#F1F1F1;}*/
+/*#novaTable tr:nth-child(even) td{background:#F1F1F1;}*/

@@ -119,5 +119,14 @@ Disable graphing?<input type ="checkbox" name="graph" <?php if($_GET['graph']=='
 
 <input type = "submit" value = "Search">
 
+<div id='columnOptions'>
+
+
+
+
+</div> 
+
+
+
 </form>
 

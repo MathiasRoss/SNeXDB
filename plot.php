@@ -17,6 +17,9 @@ Log y axis?<input type='checkbox' id='yLog'><br>
 
 
 
+
+
+
 <script>
 $( document ).ready(function() {
 
@@ -49,8 +52,6 @@ foreach($result as $key=>$row){
 array_multisort($age, SORT_ASC, $lum, $result);
 
 ?>
-
-
 
 
     var points = {errorbars:"y",yerr:{show:true, upperCap: "-", lowerCap: "-", radius:5}};
@@ -163,6 +164,12 @@ $('#newData').on('click', function() {
    plot.setData(data);
    plot.setupGrid();
    plot.draw();
+   $('#xAxisMin').val(axes.xaxis.min);
+   $('#xAxisMax').val(axes.xaxis.max);
+   $('#yAxisMin').val(axes.yaxis.min);
+   $('#yAxisMax').val(axes.yaxis.max);
+
+
 });
 
 });

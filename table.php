@@ -22,12 +22,12 @@ foreach ($novae as $name=>$row) {
 </tr>
 <tr>
 <td colspan=9>
-<a href="javascript:toggleDiv('<?php echo $name; ?>')">
-Click to show/hide details.
+<a href="javascript:toggleDiv('<?php echo $name; ?>')" style="color:black">
+Expand
 </a>
 
 
-<div id = '<?php echo $name;?>' style="display:block;" >
+<div class ='detailsDiv' id = '<?php echo $name;?>' style="display:block;" >
 <table class="detailsTable" style='white-space:nowrap;table-layout:fixed'>
 <tr>
 <th>Observation ID</th>
