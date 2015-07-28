@@ -13,21 +13,21 @@
 foreach ($novae as $name=>$row) {
 ?>
 <tr>
-<td> <?php echo $name; ?> </td>
+<td>
+<a href="javascript:toggleDiv('<?php echo $name; ?>')" style="color:black; text-decoration:none;">
+<span  id='<?php echo $name.'Button'; ?>'>+</span></a>
+<?php echo $name; ?></td>
 <td> <?php echo $row['type']; ?> </td>
 <td> <?php echo removeZeros($row['dateExploded'],0);?></td>
 <td> <?php echo removeZeros($row['distance'],2); ?></td>
 <td> <?php echo refLink($row['distRef']) ?></td>
 <td> <?php echo refLink($row['dateExplodedRef']) ?></td>
 </tr>
-<tr>
+
+<tr class = 'details' id = '<?php echo $name;?>' style="display:none;">
 <td colspan=9>
-<a href="javascript:toggleDiv('<?php echo $name; ?>')" style="color:black">
-Expand
-</a>
 
 
-<div class ='detailsDiv' id = '<?php echo $name;?>' style="display:block;" >
 <table class="detailsTable" style='white-space:nowrap;table-layout:fixed'>
 <tr>
 <th>Observation ID</th>
@@ -66,7 +66,6 @@ foreach($observations[$name] as $obs){
 } 
 ?>
 </table>
-</div>
 </td>
 </tr>
 <?php
@@ -77,9 +76,17 @@ foreach($observations[$name] as $obs){
 <script>
 function toggleDiv(d){
     if (document.getElementById(d).style.display=="none"){
-        document.getElementById(d).style.display="block";
+        document.getElementById(d).style.display="";
     } else{ 
         document.getElementById(d).style.display="none";
+    }
+    var button = d + 'Button';
+    console.log(button);
+    if (document.getElementById(button).innerHTML == '–'){
+        document.getElementById(button).innerHTML = "+";
+    }
+    else {
+        document.getElementById(button).innerHTML = "–";
     }
 }
 </script>

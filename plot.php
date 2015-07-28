@@ -10,6 +10,7 @@ x min:<input type='text' id='xAxisMin'><br>
 x max:<input type='text' id='xAxisMax'><br>
 y min:<input type='text' id='yAxisMin'><br>
 y max:<input type='text' id='yAxisMax'><br>
+Log x axis?<input type='checkbox' id='xLog'><br>
 Log y axis?<input type='checkbox' id='yLog'><br>
 <button id="update">Update Plot</button>
 </div>
@@ -114,6 +115,11 @@ $('#update').click(function(){
        plot.getAxes().yaxis.options.transform =  function(v) {return Math.log(v);};
     } else {
        plot.getAxes().yaxis.options.transform = null;
+}
+    if ($('#xLog').is(':checked')){
+       plot.getAxes().xaxis.options.transform =  function(v) {return Math.log(v);};
+    } else {
+       plot.getAxes().xaxis.options.transform = null;
 }
     plot.setupGrid();
     plot.draw();
