@@ -56,7 +56,12 @@ foreach($observations[$name] as $obs){
 </span>
 </td>
 <td> <?php echo $obs['fluxEnergyL'].' - '.$obs['fluxEnergyH']; ?></td>
-<td class='lum'> <?php echo $obs['lum']; ?>&plusmn;<?php echo $obs['lumErr']; ?></td>
+<td> <?php echo $obs['lum']; ?>
+<span class='supsub'>
+<sup class = 'superscript'>+<?php echo removeZeros($obs['lumErrH'],getPrecision($obs['lumErrH'])); ?></sup>
+<sub class = 'subscript'>-<?php echo removeZeros($obs['lumErrL'],getPrecision($obs['lumErrL'])); ?></sub>
+</span>
+</td>
 <td> <?php echo $obs['model']; ?></td>
 <td> <?php echo refLink($obs['fluxRef']) ?></td>
 <td> <?php echo refLink($obs['dateObservedRef']) ?></td>
@@ -81,7 +86,6 @@ function toggleDiv(d){
         document.getElementById(d).style.display="none";
     }
     var button = d + 'Button';
-    console.log(button);
     if (document.getElementById(button).innerHTML == '–'){
         document.getElementById(button).innerHTML = "+";
     }

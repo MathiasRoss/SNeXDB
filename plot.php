@@ -34,7 +34,7 @@ foreach ($observations as $name=>$row) {
         $jsTable = $jsTable."name:'".$name."',";
         $jsTable = $jsTable.'age:'.$obs['age'].',';
         $jsTable = $jsTable.'lum:'.$obs['lum'].',';
-        $jsTable = $jsTable.'lumErr:'.$obs['lumErr'];
+        $jsTable = $jsTable.'lumErr:'.$obs['lumErrL'];
         $jsTable = $jsTable.'},';
     }
 }

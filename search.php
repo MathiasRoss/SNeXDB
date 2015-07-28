@@ -68,14 +68,17 @@ foreach($result as $key => $row){
     $result[$key]['age']=getAge($row['dateObserved'],$row['dateExploded']);
 
     $result[$key]['lum'] = getLum($row['distance'],$row['flux']);
-    $result[$key]['lumErr'] = getLumErr($result[$key]['lum'],$row['flux'],$row['fluxErrL']);
+    $result[$key]['lumErrL'] = getLumErr($result[$key]['lum'],$row['flux'],$row['fluxErrL']); 
+    $result[$key]['lumErrH'] = getLumErr($result[$key]['lum'],$row['flux'],$row['fluxErrH']);
 
 //fix the magnitudes and misleading digits
-    $lumErrMag = floor(log10($result[$key]['lumErr']));
+    $lumErrMag = floor(log10($result[$key]['lumErrL']));
     $result[$key]['lum'] = round($result[$key]['lum']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
     $result[$key]['lum'] = $result[$key]['lum']*pow(10,-37);
-    $result[$key]['lumErr']=round($result[$key]['lumErr']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
-    $result[$key]['lumErr']=$result[$key]['lumErr']*pow(10,-37);
+    $result[$key]['lumErrL']=round($result[$key]['lumErrL']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
+    $result[$key]['lumErrL']=$result[$key]['lumErrL']*pow(10,-37);
+    $result[$key]['lumErrH']=round($result[$key]['lumErrH']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
+    $result[$key]['lumErrH']=$result[$key]['lumErrH']*pow(10,-37);
     
 
 //check to see if within lum search
