@@ -20,7 +20,7 @@ $fields = array();
 $result = array();
 
 $i = 0;
-if (($handle = fopen($_POST['uploadfile'],"r")) !== false) {
+if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
     while (($row = fgetcsv($handle, 1000, ",")) !== false) {
         if (empty($fields)){ //set $fields array to the first row, to be used as keys
             $fields = $row;
@@ -29,6 +29,30 @@ if (($handle = fopen($_POST['uploadfile'],"r")) !== false) {
 //set the values of $result, using keys from $fields, to make the 2d associative array from the csv
         foreach ($row as $key=>$value) {          
             $result[$i][$fields[$key]] = $value;
+//copy into a paramater array and then remove unneeded values; need to find better way
+            $modelParams[$i][$fields[$key]] = $value;
+            unset($modelParams[$i]['name']);
+            unset($modelParams[$i]['type']);
+            unset($modelParams[$i]['dateExploded']);
+            unset($modelParams[$i]['dateExplodedRef']);
+            unset($modelParams[$i]['distance']);
+            unset($modelParams[$i]['distRef']);
+            unset($modelParams[$i]['obsID']);
+            unset($modelParams[$i]['dateObservedRef']);
+            unset($modelParams[$i]['instrument']);
+            unset($modelParams[$i]['dateObserved']);
+            unset($modelParams[$i]['flux']);
+            unset($modelParams[$i]['fluxErrL']);
+            unset($modelParams[$i]['fluxErrH']);
+            unset($modelParams[$i]['fluxEnergyL']);
+            unset($modelParams[$i]['fluxEnergyH']);
+            unset($modelParams[$i]['fluxRef']);
+            unset($modelParams[$i]['model']);
+            foreach($modelParams[$i] as $param=>$paramValue){
+                if (empty($paramValue)){
+                     unset($modelParams[$i][$param]);
+                }
+            }
         }
 
 //check for new novae included in the file, add new information to Novae
@@ -79,11 +103,29 @@ if (($handle = fopen($_POST['uploadfile'],"r")) !== false) {
                 $params[':fluxRef'] = $result[$i]['fluxRef'];
                 $params[':model'] = $result[$i]['model'];
                 $stmt -> execute($params);
+                $result[$i]['fitsID']=$conn->lastInsertId();
             }
             catch (PDOException $e) {
                 echo $e -> getMessage();
             }
         }
+
+//check for new model information, and add each row to Parameters
+        foreach($modelParams[$i] as $param=>$paramValue){
+            try {
+                $stmt = $conn -> prepare("INSERT INTO ParametersNew(fitsID, parameter, value) VALUES(:fitsID, :parameter, :value)");
+                $stmt -> bindValue(':fitsID',$result[$i]['fitsID']);
+                $stmt -> bindValue(':parameter',$param);
+                $stmt -> bindValue(':value',$paramValue);
+                $stmt -> execute();
+            }       
+            catch (PDOException $e) {
+                echo $e -> getMessage();
+            }
+       
+        }   
+
+
         $i++;
     }
     fclose($handle);

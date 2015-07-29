@@ -1,12 +1,13 @@
 <?php
 //This file loads way more into memory than necessary
 //In case of slowdowns, may become necessary to add separate queries
+include 'debugFunc.php';
 include 'header.php';
 include 'calculations.php';
 include 'nav.php';
 ?>
 
-<form enctype='multipart/form-data' method ="post" action="upload.php">
+<form enctype='multipart/form-data' method ="post" action="updateFromFile.php">
 <input type="file" name="userfile" >
 <input type="hidden" name="MAX_FILE_SIZE" value="30000" >
 <input type="submit" value="modify database">
@@ -71,9 +72,30 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
 //set the values of $result, using keys from $fields
         foreach ($row as $key=>$value) {
             $result[$i][$fields[$key]] = $value; 
-//copy into a paramater array and then remove unneeded values
-            $modelParams[] = $value;
-            unset($modelParams['dateObserved');
+//copy into a paramater array and then remove unneeded values; need to find better way
+            $modelParams[$i][$fields[$key]] = $value;
+            unset($modelParams[$i]['name']);
+            unset($modelParams[$i]['type']);
+            unset($modelParams[$i]['dateExploded']);
+            unset($modelParams[$i]['dateExplodedRef']);
+            unset($modelParams[$i]['distance']);
+            unset($modelParams[$i]['distRef']);
+            unset($modelParams[$i]['obsID']);
+            unset($modelParams[$i]['dateObservedRef']);
+            unset($modelParams[$i]['instrument']);
+            unset($modelParams[$i]['dateObserved']);
+            unset($modelParams[$i]['flux']);
+            unset($modelParams[$i]['fluxErrL']);
+            unset($modelParams[$i]['fluxErrH']);
+            unset($modelParams[$i]['fluxEnergyL']);
+            unset($modelParams[$i]['fluxEnergyH']);
+            unset($modelParams[$i]['fluxRef']);
+            unset($modelParams[$i]['model']);
+            foreach($modelParams[$i] as $param=>$paramValue){
+                if (empty($paramValue)){
+                     unset($modelParams[$i][$param]);
+                }
+            }
         }
 
 
@@ -114,7 +136,6 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
 include 'novaeTable.php';
 include 'obsTable.php';
 $novae = array_merge($novae,$oldNovae);
-
 //fill in missing nova information
 foreach ($result as $key=>$row){
     if (empty($result[$key]['type'])){
@@ -139,11 +160,12 @@ foreach ($result as $key=>$row){
     $result[$key]['lum'] = $result[$key]['lum']*pow(10,-37);
 
 }
+foreach ($modelParams as $key=>$paramTableArray) {
+    include 'modelTable.php';
+}
 
 
-
-include 'phpTable.php';
-
+dispMem();
 
 
 ?>

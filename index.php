@@ -15,12 +15,12 @@ include 'nav.php';
 <?php
 include 'searchForm.php';
 include 'search.php';
-//dispMem();
+dispMem();
 include 'exportButton.php';
 ?>
 <?php
 include 'table.php';
-//dispMem();
+dispMem();
 if(!isset($_GET["graph"])){
     include 'plot.php';
 }
