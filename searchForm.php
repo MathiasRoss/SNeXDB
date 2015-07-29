@@ -50,13 +50,13 @@ foreach($types as $type){
 Flux is greater than
 <input type="text" name="fluxMin" value=
 <?php
-echo $_GET["fluxMin"];
+if (isset($_GET['fluxMin'])){echo $_GET["fluxMin"];}
 ?> 
 >
 and less than
 <input type="text" name="fluxMax" value=
 <?php
-echo $_GET["fluxMax"];
+if (isset($_GET['fluxMax'])){echo $_GET["fluxMax"];}
 ?>
 >
 <br>
@@ -68,13 +68,13 @@ echo $_GET["fluxMax"];
 Luminosity is greater than
 <input type="text" name="lumMin" value=
 <?php
-echo $_GET["lumMin"];
+if (isset($_GET['lumMin'])){echo $_GET["lumMin"];}
 ?> 
 >
 and less than
 <input type="text" name="lumMax" value=
 <?php
-echo $_GET["lumMax"];
+if (isset($_GET['lumMax'])){echo $_GET["lumMax"];}
 ?>
 >
 <br>
@@ -102,13 +102,13 @@ foreach($instruments as $key=>$instrument){
 Older than
 <input type="text" name="ageMin" value=
 <?php
-echo $_GET["ageMin"];
+if (isset($_GET['ageMin'])){echo $_GET["ageMin"];}
 ?> 
 >
 and younger than
 <input type="text" name="ageMax" value=
 <?php
-echo $_GET["ageMax"];
+if (isset($_GET['ageMax'])){echo $_GET["ageMax"];}
 ?>
 >
 (days)
@@ -129,4 +129,3 @@ Disable graphing?<input type ="checkbox" name="graph" <?php if($_GET['graph']=='
 
 
 </form>
-

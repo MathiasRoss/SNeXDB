@@ -62,7 +62,7 @@ foreach($observations[$name] as $obs){
 <sub class = 'subscript'>-<?php echo removeZeros($obs['lumErrL'],getPrecision($obs['lumErrL'])); ?></sub>
 </span>
 </td>
-<td> <?php echo $obs['model']; ?></td>
+<td> <a href="javascript:modelPopup('<?php echo $obs['fitsID']; ?>')"><?php echo $obs['model']; ?></a></td>
 <td> <?php echo refLink($obs['fluxRef']) ?></td>
 <td> <?php echo refLink($obs['dateObservedRef']) ?></td>
 
@@ -92,6 +92,14 @@ function toggleDiv(d){
     else {
         document.getElementById(button).innerHTML = "–";
     }
+}
+
+function modelPopup(d) {
+    var selector = '#'+d;
+    var popupId = 'model'+d;
+    $('<div/>', {id: popupId}).appendTo(selector);
+    $('#'+popupId).dialog();
+    console.log('Hi');
 }
 </script>
 

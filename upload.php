@@ -3,25 +3,11 @@
 //In case of slowdowns, may become necessary to add separate queries
 include 'header.php';
 include 'calculations.php';
-include 'uploadButton.php';
-/*
-$uploaddir = '/var/www/uploads/';
-$uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
-
-echo '<pre>';
-if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
-    echo "File is valid, and was successfully uploaded.\n";
-} else {
-    echo "Possible file upload attack!\n";
-}
-
-echo 'Here is some more debugging info:';
-print_r($_FILES);
-
-print "</pre>";
+include 'nav.php';
 ?>
-<form method ="post" action="upload.php">
-<input type="hidden" name="uploadfile" value="<?php echo $_POST['userfile']; ?>">
+
+<form enctype='multipart/form-data' method ="post" action="upload.php">
+<input type="file" name="userfile" >
 <input type="hidden" name="MAX_FILE_SIZE" value="30000" >
 <input type="submit" value="modify database">
 
@@ -31,7 +17,7 @@ print "</pre>";
 
 
 <?php
-*/include 'connect.php';
+include 'connect.php';
 
 try {
     $stmt = $conn-> query("SELECT * From Novae");
@@ -70,6 +56,7 @@ $novae = array();
 $observations = array();
 $newNames = array();
 $newTypes = array();
+$modelParams = array();
 
 //Loops through each row in the file, creating an associative array $result with all the new information
 $result = $fields = array();
@@ -80,10 +67,19 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
             $fields = $row;
             continue;
         }
+
 //set the values of $result, using keys from $fields
         foreach ($row as $key=>$value) {
             $result[$i][$fields[$key]] = $value; 
+//copy into a paramater array and then remove unneeded values
+            $modelParams[] = $value;
+            unset($modelParams['dateObserved');
         }
+
+
+
+
+
 //check for an observation id, in case adding to existing observation
         if (!empty($result[$i]['obsID'])){
             $result[$i]['name']=$oldObs[$result[$i]['obsID']]['name'];
@@ -106,6 +102,7 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
         if (!in_array($result[$i]['type'], $types)) {
             $newTypes[] = $result[$i]['type'];
         }
+
 
 
 

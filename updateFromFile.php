@@ -1,9 +1,7 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
 
-include 'connect.php';
 include 'debugFunc.php';
+include 'connect.php';
 
 try {
     $stmt = $conn-> query("SELECT name From Novae");
@@ -37,7 +35,7 @@ if (($handle = fopen($_POST['uploadfile'],"r")) !== false) {
         if (!in_array($result[$i]['name'], $names)&& (!empty($result[$i]['name']))) {
             $names[] = $result[$i]['name'];
             try{
-                $stmt = $conn -> prepare('INSERT INTO Novae(name, type, dateExploded,dateExplodedRef,distance,distRef) VALUES(:name,:type,:dateExploded,:dateExplodedRef,:distance,:distRef)');
+                $stmt = $conn -> prepare('INSERT INTO NovaeNew(name, type, dateExploded,dateExplodedRef,distance,distRef) VALUES(:name,:type,:dateExploded,:dateExplodedRef,:distance,:distRef)');
                 $params = array();
                 $params[':name'] = $result[$i]['name'];
                 $params[':type'] = $result[$i]['type'];
@@ -54,7 +52,7 @@ if (($handle = fopen($_POST['uploadfile'],"r")) !== false) {
 //check for new observation, and add it to Observations
         if (empty($result[$i]['obsID'])) {
             try{
-                $stmt = $conn -> prepare("INSERT INTO Observations(name, dateObserved, dateObservedRef, instrument) VALUES(:name,:dateObserved,:dateObservedRef,:instrument)");
+                $stmt = $conn -> prepare("INSERT INTO ObservationsNew(name, dateObserved, dateObservedRef, instrument) VALUES(:name,:dateObserved,:dateObservedRef,:instrument)");
                 $params = array();
                 $params[':name'] = $result[$i]['name'];
                 $params[':dateObserved'] = $result[$i]['dateObserved'];
@@ -70,7 +68,7 @@ if (($handle = fopen($_POST['uploadfile'],"r")) !== false) {
 //check for new flux measurements, and add it to Fits
         if (!empty($result[$i]['flux'])){
             try {
-                $stmt = $conn -> prepare("INSERT INTO Fits(obsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model) VALUES(:obsID, :flux, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model)");
+                $stmt = $conn -> prepare("INSERT INTO FitsNew(obsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model) VALUES(:obsID, :flux, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model)");
                 $params = array();
                 $params[':obsID'] = $result[$i]['obsID'];
                 $params[':flux'] = $result[$i]['flux'];
