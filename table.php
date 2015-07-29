@@ -62,7 +62,7 @@ foreach($observations[$name] as $obs){
 <sub class = 'subscript'>-<?php echo removeZeros($obs['lumErrL'],getPrecision($obs['lumErrL'])); ?></sub>
 </span>
 </td>
-<td> <a href="javascript:modelPopup('<?php echo $obs['fitsID']; ?>')"><?php echo $obs['model']; ?></a></td>
+<td> <a href='fitDetails.php?fitsID=<?php echo $obs['fitsID']; ?>'><?php echo $obs['model']; ?></a></td>
 <td> <?php echo refLink($obs['fluxRef']) ?></td>
 <td> <?php echo refLink($obs['dateObservedRef']) ?></td>
 
