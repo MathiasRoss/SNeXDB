@@ -21,7 +21,7 @@ include 'exportButton.php';
 <?php
 include 'table.php';
 //dispMem();
-if($_GET["graph"]!='on'){
+if(!isset($_GET["graph"])){
     include 'plot.php';
 }
 ?>

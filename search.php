@@ -55,7 +55,6 @@ try {
     $stmt = $conn -> prepare($query);
     $stmt -> execute($params);
     $result = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-    $jsonTable[] = $row;
 } 
 catch(PDOException $e) {
     echo $e -> getMessage();
