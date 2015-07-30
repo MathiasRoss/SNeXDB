@@ -9,6 +9,7 @@ include 'nav.php';
 
 <form enctype='multipart/form-data' method ="post" action="updateFromFile.php">
 <input type="file" name="userfile" >
+<input type="text" name="uploadSet">
 <input type="hidden" name="MAX_FILE_SIZE" value="30000" >
 <input type="submit" value="modify database">
 

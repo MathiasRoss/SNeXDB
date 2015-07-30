@@ -18,6 +18,11 @@ foreach($names as $key=>$name){
 
 $fields = array();
 $result = array();
+$newObs = array();
+$newFits = array();
+
+$knownFields = array('name','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
+
 
 $i = 0;
 if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
@@ -29,38 +34,19 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
 //set the values of $result, using keys from $fields, to make the 2d associative array from the csv
         foreach ($row as $key=>$value) {          
             $result[$i][$fields[$key]] = $value;
-//copy into a paramater array and then remove unneeded values; need to find better way
-            $modelParams[$i][$fields[$key]] = $value;
-            unset($modelParams[$i]['name']);
-            unset($modelParams[$i]['type']);
-            unset($modelParams[$i]['dateExploded']);
-            unset($modelParams[$i]['dateExplodedRef']);
-            unset($modelParams[$i]['distance']);
-            unset($modelParams[$i]['distRef']);
-            unset($modelParams[$i]['obsID']);
-            unset($modelParams[$i]['dateObservedRef']);
-            unset($modelParams[$i]['instrument']);
-            unset($modelParams[$i]['dateObserved']);
-            unset($modelParams[$i]['flux']);
-            unset($modelParams[$i]['fluxErrL']);
-            unset($modelParams[$i]['fluxErrH']);
-            unset($modelParams[$i]['fluxEnergyL']);
-            unset($modelParams[$i]['fluxEnergyH']);
-            unset($modelParams[$i]['fluxRef']);
-            unset($modelParams[$i]['model']);
-            foreach($modelParams[$i] as $param=>$paramValue){
-                if (empty($paramValue)){
-                     unset($modelParams[$i][$param]);
-                }
+//copy into a paramater array and then remove unneeded values
+            if ((!in_array($fields[$key],$knownFields)) &&(!empty($value))){
+                $modelParams[$i][$fields[$key]] = $value;
             }
         }
 
 //check for new novae included in the file, add new information to Novae
-        if (!in_array($result[$i]['name'], $names)&& (!empty($result[$i]['name']))) {
+        if (!in_array($result[$i]['name'], $names) && (!empty($result[$i]['name']))) {
             $names[] = $result[$i]['name'];
             try{
-                $stmt = $conn -> prepare('INSERT INTO NovaeNew(name, type, dateExploded,dateExplodedRef,distance,distRef) VALUES(:name,:type,:dateExploded,:dateExplodedRef,:distance,:distRef)');
+                $stmt = $conn -> prepare('INSERT INTO NovaeNew(name, type, dateExploded,dateExplodedRef,distance,distRef,uploadSet) VALUES(:name,:type,:dateExploded,:dateExplodedRef,:distance,:distRef,:uploadSet)');
                 $params = array();
+                $params[':uploadSet']=$_POST['uploadSet'];
                 $params[':name'] = $result[$i]['name'];
                 $params[':type'] = $result[$i]['type'];
                 $params[':dateExploded'] = $result[$i]['dateExploded'];
@@ -74,11 +60,12 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
             }
         }
 //check for new observation, and add it to Observations
-        if (empty($result[$i]['obsID'])) {
+        if (empty($result[$i]['obsID'])&&(!empty($result[$i]['instrument']))&&(!in_array($result[$i]['localObsID'],$newObs))) {
             try{
-                $stmt = $conn -> prepare("INSERT INTO ObservationsNew(name, dateObserved, dateObservedRef, instrument) VALUES(:name,:dateObserved,:dateObservedRef,:instrument)");
+                $stmt = $conn -> prepare("INSERT INTO ObservationsNew(name, dateObserved, dateObservedRef, instrument, uploadSet) VALUES(:name,:dateObserved,:dateObservedRef,:instrument, :uploadSet)");
                 $params = array();
                 $params[':name'] = $result[$i]['name'];
+                $params[':uploadSet']=$_POST['uploadSet'];
                 $params[':dateObserved'] = $result[$i]['dateObserved'];
                 $params[':dateObservedRef'] = $result[$i]['dateObservedRef'];
                 $params[':instrument'] = $result[$i]['instrument'];
@@ -88,13 +75,15 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
             catch (PDOException $e) {
                 echo $e -> getMessage();
             }
+            $newObs[] = $result[$i]['localObsID'];
         }
 //check for new flux measurements, and add it to Fits
-        if (!empty($result[$i]['flux'])){
+        if ((empty($result[$i]['fitsID']))&&(!empty($result[$i]['flux']))&&(!in_array($result[$i]['localFitsID'],$newFits))){
             try {
-                $stmt = $conn -> prepare("INSERT INTO FitsNew(obsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model) VALUES(:obsID, :flux, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model)");
+                $stmt = $conn -> prepare("INSERT INTO FitsNew(obsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet) VALUES(:obsID, :flux, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model, :uploadSet)");
                 $params = array();
                 $params[':obsID'] = $result[$i]['obsID'];
+                $params[':uploadSet']=$_POST['uploadSet'];
                 $params[':flux'] = $result[$i]['flux'];
                 $params[':fluxErrL'] = $result[$i]['fluxErrL'];
                 $params[':fluxErrH'] = $result[$i]['fluxErrH'];
@@ -108,7 +97,9 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
             catch (PDOException $e) {
                 echo $e -> getMessage();
             }
+        $newFits[] = $result[$i]['localFitsID'];
         }
+        
 
 //check for new model information, and add each row to Parameters
         foreach($modelParams[$i] as $param=>$paramValue){
