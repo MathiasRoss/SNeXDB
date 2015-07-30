@@ -11,6 +11,11 @@
 </thead>
 <?php
 foreach ($novae as $name=>$row) {
+    if (!empty($_GET['MJD'])){
+        $novae[$name]['dateExploded'] = jdtojulian(mjdtojd($row['dateExploded']));
+    }
+
+
 ?>
 <tr>
 <td>
@@ -18,7 +23,12 @@ foreach ($novae as $name=>$row) {
 <span  id='<?php echo $name.'Button'; ?>'>+</span></a>
 <?php echo $name; ?></td>
 <td> <?php echo $row['type']; ?> </td>
-<td> <?php echo removeZeros($row['dateExploded'],0);?></td>
+<td> <?php 
+
+    if (!empty($_GET['MJD'])){
+        echo jdtojulian(mjdtojd($row['dateExploded']));
+    } else {
+echo removeZeros($novae[$name]['dateExploded'],0);}?></td>
 <td> <?php echo removeZeros($row['distance'],2); ?></td>
 <td> <?php echo refLink($row['distRef']) ?></td>
 <td> <?php echo refLink($row['dateExplodedRef']) ?></td>
@@ -46,7 +56,13 @@ foreach($observations[$name] as $obs){
 ?>
 <tr id=<?php echo $obs['fitsID'];?>>
 <td> <?php echo $obs['obsID'];?></td>
-<td> <?php echo $obs['dateObserved'];?></td>
+<td> <?php 
+
+    if (!empty($_GET['MJD'])){
+        echo jdtojulian(mjdtojd($obs['dateObserved']));
+    } else {
+
+echo $obs['dateObserved'];}?></td>
 <td class='age'> <?php echo $obs['age'];?> </td>
 <td> <?php echo $obs['instrument'];?></td>
 <td><?php echo $obs['flux']; ?>

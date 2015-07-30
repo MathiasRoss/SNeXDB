@@ -18,6 +18,7 @@ include 'search.php';
 dispMem();
 include 'exportButton.php';
 ?>
+<hr>
 <?php
 include 'table.php';
 dispMem();

@@ -11,7 +11,7 @@ include 'nav.php';
 <div id = 'content'>
 <?php
 try {
-    $stmt = $conn->query("SELECT * FROM Fits LEFT JOIN Observations ON Fits.obsID = Observations.obsID LEFT JOIN Novae ON Observations.name= Novae.name");
+    $stmt = $conn->query("SELECT * FROM FitsNew LEFT JOIN ObservationsNew ON FitsNew.obsID = ObservationsNew.obsID LEFT JOIN NovaeNew ON ObservationsNew.name= NovaeNew.name");
     $stmt->execute();
     $result = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 }

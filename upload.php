@@ -59,6 +59,13 @@ $observations = array();
 $newNames = array();
 $newTypes = array();
 $modelParams = array();
+$newObs = array();
+$newFits = array();
+
+
+$knownFields = array('name','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
+
+
 
 //Loops through each row in the file, creating an associative array $result with all the new information
 $result = $fields = array();
@@ -73,29 +80,9 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
 //set the values of $result, using keys from $fields
         foreach ($row as $key=>$value) {
             $result[$i][$fields[$key]] = $value; 
-//copy into a paramater array and then remove unneeded values; need to find better way
-            $modelParams[$i][$fields[$key]] = $value;
-            unset($modelParams[$i]['name']);
-            unset($modelParams[$i]['type']);
-            unset($modelParams[$i]['dateExploded']);
-            unset($modelParams[$i]['dateExplodedRef']);
-            unset($modelParams[$i]['distance']);
-            unset($modelParams[$i]['distRef']);
-            unset($modelParams[$i]['obsID']);
-            unset($modelParams[$i]['dateObservedRef']);
-            unset($modelParams[$i]['instrument']);
-            unset($modelParams[$i]['dateObserved']);
-            unset($modelParams[$i]['flux']);
-            unset($modelParams[$i]['fluxErrL']);
-            unset($modelParams[$i]['fluxErrH']);
-            unset($modelParams[$i]['fluxEnergyL']);
-            unset($modelParams[$i]['fluxEnergyH']);
-            unset($modelParams[$i]['fluxRef']);
-            unset($modelParams[$i]['model']);
-            foreach($modelParams[$i] as $param=>$paramValue){
-                if (empty($paramValue)){
-                     unset($modelParams[$i][$param]);
-                }
+//create an array of parameters 
+            if ((!in_array($fields[$key],$knownFields)) &&(!empty($value))){
+                $modelParams[$i][$fields[$key]] = $value;
             }
         }
 
@@ -109,8 +96,11 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
             $result[$i]['dateObserved']=$oldObs[$result[$i]['obsID']]['dateObserved'];
             $result[$i]['dateObservedRef']=$oldObs[$result[$i]['obsID']]['dateObservedRef'];
             $result[$i]['instrument']=$oldObs[$result[$i]['obsID']]['instrument'];
-        } else {//record new observation info for display
-             $observations[]=$result[$i];//has excess info
+        } else if ((!in_array($result[$i]['localObsID'],$newObs))&&(!empty($result[$i]['dateObserved']))){//record new observation info for display
+            $observations[]=$result[$i];//has excess info
+            if (!empty($result[$i]['localObsID'])){
+                $newObs[] = $result[$i]['localObsID'];
+            }
         }
 
 
@@ -121,6 +111,7 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
             $newNames[] = $result[$i]['name'];
             $novae[$result[$i]['name']] = $result[$i];//has some excess info
         }
+
 //checks for new types
         if (!in_array($result[$i]['type'], $types)) {
             $newTypes[] = $result[$i]['type'];
@@ -133,9 +124,11 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
     }
     fclose($handle);
 }
-
+echo 'New novae to be added: <br>';
 include 'novaeTable.php';
+echo 'New observations to be added: <br>';
 include 'obsTable.php';
+echo 'New analysis and measurements to be added: <br>';
 $novae = array_merge($novae,$oldNovae);
 //fill in missing nova information
 foreach ($result as $key=>$row){
@@ -161,6 +154,8 @@ foreach ($result as $key=>$row){
     $result[$key]['lum'] = $result[$key]['lum']*pow(10,-37);
 
 }
+include 'processResults.php';
+include 'fitsTable.php';
 foreach ($modelParams as $key=>$paramTableArray) {
     include 'modelTable.php';
 }
