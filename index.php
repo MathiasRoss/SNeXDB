@@ -6,13 +6,7 @@ include 'calculations.php';
 include 'header.php';
 
 include 'connect.php';
-?>
-<body>
-<?php
-include 'nav.php';
-?>
-<div id = 'content'>
-<?php
+
 include 'searchForm.php';
 include 'search.php';
 dispMem();
@@ -25,11 +19,7 @@ dispMem();
 if(!isset($_GET["graph"])){
     include 'plot.php';
 }
+include 'footer.php';
+
 ?>
 
-</div>
-<?php
-include 'footer.php';
-$conn = null;
-?>
-</body>

@@ -4,7 +4,6 @@
 include 'debugFunc.php';
 include 'header.php';
 include 'calculations.php';
-include 'nav.php';
 ?>
 
 <form enctype='multipart/form-data' method ="post" action="updateFromFile.php">
@@ -163,5 +162,7 @@ foreach ($modelParams as $key=>$paramTableArray) {
 
 dispMem();
 
+
+include 'footer.php';
 
 ?>

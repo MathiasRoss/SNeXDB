@@ -11,6 +11,15 @@
 <script src="flot/jquery.flot.errorbars.js"></script>
 <script src="flot/jquery.flot.axislabels.js"></script>
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
-
-
 </head>
+<body>
+
+
+<div id='header'>
+<h1><a href='http://127.0.0.1'>Supernovae X-Ray Database</a></h1>
+</div>
+
+<div id='menu'>
+Menu Links Here?
+</div>
+<div id='content'>
