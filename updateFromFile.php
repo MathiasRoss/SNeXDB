@@ -2,7 +2,7 @@
 
 include 'debugFunc.php';
 include 'connect.php';
-
+include 'header.php';
 try {
     $stmt = $conn-> query("SELECT name From Novae");
     $names = $stmt -> fetchAll(PDO::FETCH_ASSOC);
@@ -32,6 +32,7 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
             continue;
         }
 //set the values of $result, using keys from $fields, to make the 2d associative array from the csv
+        $modelParams[$i]=array();
         foreach ($row as $key=>$value) {          
             $result[$i][$fields[$key]] = $value;
 //copy into a paramater array and then remove unneeded values
@@ -70,19 +71,27 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
                 $params[':dateObservedRef'] = $result[$i]['dateObservedRef'];
                 $params[':instrument'] = $result[$i]['instrument'];
                 $stmt -> execute($params);
-                $result[$i]['obsID']=$conn->lastInsertId();
+                $result[$i]['newObsID']=$conn->lastInsertId();
             }
             catch (PDOException $e) {
                 echo $e -> getMessage();
             }
-            $newObs[] = $result[$i]['localObsID'];
+            if(!empty($result[$i]['localObsID'])){
+                $newObs[$result[$i]['newObsID']] = $result[$i]['localObsID'];
+            }
         }
 //check for new flux measurements, and add it to Fits
         if ((empty($result[$i]['fitsID']))&&(!empty($result[$i]['flux']))&&(!in_array($result[$i]['localFitsID'],$newFits))){
+            if (!empty($result[$i]['localObsID'])){
+                $flipped=array_flip($newObs);
+                $result[$i]['newObsID']=$flipped[$result[$i]['localObsID']];
+                unset($flipped);
+            }
             try {
-                $stmt = $conn -> prepare("INSERT INTO FitsNew(obsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet) VALUES(:obsID, :flux, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model, :uploadSet)");
+                $stmt = $conn -> prepare("INSERT INTO FitsNew(obsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet, newObsID) VALUES(:obsID, :flux, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model, :uploadSet, :newObsID)");
                 $params = array();
                 $params[':obsID'] = $result[$i]['obsID'];
+                $params[':newObsID']=$result[$i]['newObsID'];
                 $params[':uploadSet']=$_POST['uploadSet'];
                 $params[':flux'] = $result[$i]['flux'];
                 $params[':fluxErrL'] = $result[$i]['fluxErrL'];
@@ -92,20 +101,34 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
                 $params[':fluxRef'] = $result[$i]['fluxRef'];
                 $params[':model'] = $result[$i]['model'];
                 $stmt -> execute($params);
-                $result[$i]['fitsID']=$conn->lastInsertId();
+                $result[$i]['newFitsID']=$conn->lastInsertId();
             }
             catch (PDOException $e) {
                 echo $e -> getMessage();
             }
-        $newFits[] = $result[$i]['localFitsID'];
+            if (!empty($result[$i]['localFitsID'])){
+                $newFits[$result[$i]['newFitsID']] = $result[$i]['localFitsID'];
+            }
         }
         
 
 //check for new model information, and add each row to Parameters
         foreach($modelParams[$i] as $param=>$paramValue){
+            if(!empty($result[$i]['localFitsID'])){
+                $flipped = array_flip($newFits);
+                $result[$i]['newFitsID']=$flipped[$result[$i]['localFitsID']];
+                unset($flipped);
+            }
+            if(empty($result[$i]['fitsID'])){
+                $result[$i]['fitsID']=0;
+            }
+            if(empty($result[$i]['newFitsID'])){
+//                $result[$i]['newFitsID']=0;
+            }
             try {
-                $stmt = $conn -> prepare("INSERT INTO ParametersNew(fitsID, parameter, value) VALUES(:fitsID, :parameter, :value)");
+                $stmt = $conn -> prepare("INSERT INTO ParametersNew(fitsID, parameter, value, newFitsID) VALUES(:fitsID, :parameter, :value, :newFitsID)");
                 $stmt -> bindValue(':fitsID',$result[$i]['fitsID']);
+                $stmt -> bindValue(':newFitsID',$result[$i]['newFitsID']);
                 $stmt -> bindValue(':parameter',$param);
                 $stmt -> bindValue(':value',$paramValue);
                 $stmt -> execute();
@@ -122,5 +145,5 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
     fclose($handle);
     echo "Submitted Succesfully";
 }
-
+include 'footer.php';
 ?>

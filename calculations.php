@@ -41,7 +41,7 @@ function getLumErr($lum,$flux,$fluxErr){
 }
 
 function refLink($ref){
-    $link = "<a href=\"http://adsabs.harvard.edu/abs/". $ref ."\">".$ref."</a>";
+    $link = "<a href=\"http://adsabs.harvard.edu/abs/". rawurlencode($ref) ."\">".htmlspecialchars($ref)."</a>";
     return $link;
 }
 

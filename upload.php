@@ -4,6 +4,7 @@
 include 'debugFunc.php';
 include 'header.php';
 include 'calculations.php';
+include 'tables.php';
 ?>
 
 <form enctype='multipart/form-data' method ="post" action="updateFromFile.php">
@@ -153,10 +154,13 @@ foreach ($result as $key=>$row){
     }
     $result[$key]['lum']=getLum($result[$key]['distance'],$result[$key]['flux']);
     $result[$key]['age']=getAge($result[$key]['dateObserved'],$result[$key]['dateExploded']);
+    $result[$key]['obsID'] = $key;
+
 }
 include 'processResults.php';
-include 'fitsTable.php';
+detailsTable($result);
 foreach ($modelParams as $key=>$paramTableArray) {
+    echo 'paramaters associated with '.$key.':';
     include 'modelTable.php';
 }
 

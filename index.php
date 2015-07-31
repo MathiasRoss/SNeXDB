@@ -11,7 +11,6 @@ if (isset($_GET['objid'])){
     include 'exportButton.php';
     echo '<hr>';
     displayTable($novae,$observations);
-//    dispMem();
     if(!isset($_GET["graph"])){
         include 'plot.php';
     }
