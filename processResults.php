@@ -22,7 +22,6 @@ foreach($result as $key => $row){
     $result[$key]['fluxEnergyH']=removeZeros($row['fluxEnergyH'],getPrecision($row['fluxEnergyH']));
 
     $lumErrMag = floor(log10($result[$key]['lumErrL']));
-    echo $lumErrMag;
     $result[$key]['lum'] = roundToMag($result[$key]['lum'],$lumErrMag);
     $result[$key]['lumErrL'] = roundToMag($result[$key]['lumErrL'],$lumErrMag);
     $result[$key]['lumErrH'] = roundToMag($result[$key]['lumErrH'],$lumErrMag);
@@ -44,6 +43,6 @@ foreach($result as $key => $row){
 
 
 
-$jsonTable = json_encode($result);
+//$jsonTable = json_encode($result);
 
 ?>

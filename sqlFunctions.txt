@@ -1,0 +1,9 @@
+DELIMITER $$
+
+CREATE FUNCTION getLum(flux decimal(60,30), distance decimal(60,30)) RETURNS DECIMAL(60,30)
+DETERMINISTIC
+BEGIN
+    RETURN(4.*flux*PI()*POW(distance*3.08567758,2)*POW(10,-2));
+END $$
+
+DELIMITER ;

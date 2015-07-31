@@ -129,8 +129,12 @@ echo 'New observations to be added: <br>';
 include 'obsTable.php';
 echo 'New analysis and measurements to be added: <br>';
 $novae = array_merge($novae,$oldNovae);
-//fill in missing nova information
+//fill in missing information and remove rows that aren't for new fits
 foreach ($result as $key=>$row){
+    if (empty($result[$key]['flux'])){
+        unset($result[$key]);
+        continue;
+    }
     if (empty($result[$key]['type'])){
         $result[$key]['type'] = $novae[$row['name']]['type'];
     }
@@ -147,6 +151,8 @@ foreach ($result as $key=>$row){
     if (empty($result[$key]['distRef'])){
         $result[$key]['distRef'] = $novae[$row['name']]['distRef'];
     }
+    $result[$key]['lum']=getLum($result[$key]['distance'],$result[$key]['flux']);
+    $result[$key]['age']=getAge($result[$key]['dateObserved'],$result[$key]['dateExploded']);
 }
 include 'processResults.php';
 include 'fitsTable.php';
@@ -155,7 +161,7 @@ foreach ($modelParams as $key=>$paramTableArray) {
 }
 
 
-dispMem();
+dispPeakMem();
 
 
 include 'footer.php';

@@ -9,7 +9,7 @@ function mjdtojd($date){
 }
 
 function mpctocm($distance){
-    return $distance*3.08567758*pow(10,10^18);
+    return $distance*3.08567758*pow(10,24);
 }
 
 function getPrecision($error)
@@ -33,7 +33,7 @@ function roundToMag($value,$magnitude){
 function getLum($distance,$flux){
 //    $distance = $distance*3.08567758*pow(10,18); //conversion from Mparsecs to cm
 //    $flux = $flux*pow(10,-13);//flux stored in this order
-    return 4.*3.14159265*mpctocm($distance)*mpctocm($distance)*$flux*pow(10,-13);
+    return 4.*3.14159265*mpctocm($distance)*mpctocm($distance)*$flux*pow(10,-50);
 }   
 
 function getLumErr($lum,$flux,$fluxErr){
