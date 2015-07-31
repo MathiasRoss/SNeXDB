@@ -117,7 +117,7 @@ if (isset($_GET['ageMax'])){echo $_GET["ageMax"];}
 
 Disable graphing?<input type ="checkbox" name="graph" <?php if($_GET['graph']=='on'){echo 'checked';}?>>
 
-Convert results to julian date? <input type="checkbox" name="MJD" <?php if($_GET['MJD']=='on'){echo 'checked';}?>>
+Convert results to standard date? <input type="checkbox" name="MJD" <?php if($_GET['MJD']=='on'){echo 'checked';}?>>
 <input type = "submit" value = "Search">
 
 <div id='columnOptions'>

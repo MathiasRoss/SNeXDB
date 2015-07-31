@@ -40,13 +40,13 @@ echo removeZeros($novae[$name]['dateExploded'],0);}?></td>
 
 <table class="detailsTable" style='white-space:nowrap;table-layout:fixed'>
 <tr>
-<th>Observation ID</th>
-<th>Date Observed (MJD)</th>
+<th>Obs. ID</th>
+<th>Obs. Date</th>
 <th>Age (days)</th>
 <th>Instrument</th>
-<th>Flux (x 10<sup>-13</sup> erg cm<sup>-2</sup> s<sup>-1</sup>)</th>
-<th>Flux Energy Range (KeV)</th>
-<th>Luminosity (x 10<sup>37</sup> erg s<sup>-1</sup>)</th>
+<th>Flux <br>(x 10<sup>-13</sup> erg cm<sup>-2</sup> s<sup>-1</sup>)</th>
+<th>Energy Range <br>(KeV)</th>
+<th>Luminosity <br> (x 10<sup>37</sup> erg s<sup>-1</sup>)</th>
 <th>Model</th>
 <th>Flux Reference</th>
 <th>Observation Reference</th>

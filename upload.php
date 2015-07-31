@@ -147,11 +147,6 @@ foreach ($result as $key=>$row){
     if (empty($result[$key]['distRef'])){
         $result[$key]['distRef'] = $novae[$row['name']]['distRef'];
     }
-    $result[$key]['lum'] = getLum($result[$key]['distance'],$result[$key]['flux']);
-    $lumErrMag = floor(log10($result[$key]['lum']*$row['fluxErrL']/$row['flux']));
-    $result[$key]['lum'] = round($result[$key]['lum']/(pow(10,$lumErrMag)))*pow(10,$lumErrMag);
-    $result[$key]['lum'] = $result[$key]['lum']*pow(10,-37);
-
 }
 include 'processResults.php';
 include 'fitsTable.php';

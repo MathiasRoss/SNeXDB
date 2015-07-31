@@ -24,6 +24,10 @@ function removeZeros($value,$precision){
     return round($value*pow(10,$precision))/pow(10,$precision);
 }
 
+//function names are hard, okay?
+function roundToMag($value,$magnitude){
+    return round($value/pow(10,$magnitude))*pow(10,$magnitude);
+}
 
 
 function getLum($distance,$flux){

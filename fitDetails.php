@@ -1,14 +1,8 @@
 <?php
 include 'connect.php';
 include 'header.php';
-?>
 
-<body>
-<?php
-include 'nav.php';
-?>
-<div id = 'content'>
-<?php
+
 
 try {
     $stmt = $conn->prepare("SELECT parameter, value FROM Parameters WHERE fitsID=:fitsID");
@@ -22,7 +16,6 @@ catch (PDOException $e) {
     echo $e -> getMessage();
 }
 include 'modelTable.php';
+include 'footer.php';
 
 ?>
-</div>
-</body>

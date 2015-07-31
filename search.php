@@ -4,7 +4,7 @@ $params = array();
 
 
 //write query based on search
-$query = "SELECT * FROM Fits LEFT JOIN Observations ON Fits.obsID = Observations.obsID LEFT JOIN Novae on Observations.name= Novae.name WHERE ";
+$query = "SELECT Novae.name,type,dateExploded,dateExplodedRef,distance,distRef,Observations.obsID,dateObserved,dateObservedRef,instrument,fitsID,flux,fluxErrL,fluxErrH,fluxEnergyL,fluxEnergyH,fluxRef,model, getLum(flux,distance) AS lum, (dateObserved-dateExploded) AS age FROM Fits LEFT JOIN Observations ON Fits.obsID = Observations.obsID LEFT JOIN Novae on Observations.name= Novae.name WHERE ";
 
 //object name search
 if ($_GET["objid"] != ""){
@@ -44,8 +44,29 @@ if ($_GET['fluxMin'] != ""){
 }
 if ($_GET['fluxMax'] != ""){
     $query = $query . " AND flux <= :fluxMax";
-    $params['"fluxMax'] = $_GET["fluxMax"];
+    $params[':fluxMax'] = $_GET["fluxMax"];
 }
+
+//lum search
+if ($_GET['lumMin'] != ""){
+    $query = $query . "AND getLum(Fits.flux,Novae.distance) >= :lumMin";
+    $params['lumMin'] = $_GET['lumMin'];
+}
+if ($_GET['lumMax'] != ""){
+    $query = $query . "AND getLum(Fits.flux,Novae.distance) <= :lumMax";
+    $params['lumMax'] = $_GET['lumMax'];
+}
+
+//age search
+if ($_GET['ageMin'] != ""){
+    $query = $query . "AND (dateObserved-dateExploded) >= :ageMin";
+    $params['ageMin'] = $_GET['ageMin'];
+}
+if ($_GET['ageMax'] != ""){
+    $query = $query . "AND (dateObserved-dateExploded) <= :ageMax";
+    $params['ageMax'] = $_GET['ageMax'];
+}
+
 
 
 $jsonTable = array();
