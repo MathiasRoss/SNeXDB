@@ -1,6 +1,7 @@
 <!doctype html>
 <meta charset="UTF-8"> 
 <head>
+
 <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
@@ -13,13 +14,17 @@
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
 </head>
 <body>
-
+<div id='wrapper'>
 
 <div id='header'>
 <h1><a href='http://127.0.0.1'>Supernovae X-Ray Database</a></h1>
 </div>
 
 <div id='menu'>
-Menu Links Here?
+<ul>
+<li><a href='submitUpload.php'>Submit Upload</a></li>
+<li><a href='about.php'>About</a></li>
+<li><a href='methodology.php'>Methodology</a></li>
+</ul>
 </div>
 <div id='content'>
