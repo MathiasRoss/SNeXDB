@@ -15,7 +15,7 @@ border-bottom: 1px solid #4A0404;
 color:white;
 text-align:center;
 }
-h1 a, a:active, a:visited, a:hover {
+h1 a,h1 a:active,h1 a:visited,h1 a:hover {
     text-decoration:none;
     color:white;
 }
