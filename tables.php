@@ -216,18 +216,87 @@ foreach ($observations as $row){
 }
 
 
+function fitsTable($observations){
+?>
+<table style='white-space:nowrap;table-layout:fixed'>
+<tr>
+<th>Obs. ID</th>
+<th>Obs. Date</th>
+<th>Flux <br>(x 10<sup>-13</sup> erg cm<sup>-2</sup> s<sup>-1</sup>)</th>
+<th>Energy Range <br>(KeV)</th>
+<th>Luminosity <br> (x 10<sup>37</sup> erg s<sup>-1</sup>)</th>
+<th>Model</th>
+<th>Flux Reference</th>
+</tr>
+<?php
+foreach($observations as $obs){ 
+?>
+<td> <?php echo $obs['obsID'];?></td>
+<td> <?php 
+
+    if (!empty($_GET['MJD'])){
+        echo jdtojulian(mjdtojd($obs['dateObserved']));
+    } else {
+
+echo $obs['dateObserved'];}?></td>
+<td class='age'> <?php echo $obs['age'];?> </td>
+<td> <?php echo $obs['instrument'];?></td>
+<td><?php echo $obs['flux']; ?>
+<span class='supsub'>
+<sup class = 'superscript'>+<?php echo $obs['fluxErrH']; ?></sup>
+<sub class = 'subscript'>-<?php echo $obs['fluxErrL']; ?></sub>
+</span>
+</td>
+<td> <?php echo $obs['fluxEnergyL'].' - '.$obs['fluxEnergyH']; ?></td>
+<td> <?php echo $obs['lum']; ?>
+<span class='supsub'>
+<sup class = 'superscript'>+<?php echo removeZeros($obs['lumErrH'],getPrecision($obs['lumErrH'])); ?></sup>
+<sub class = 'subscript'>-<?php echo removeZeros($obs['lumErrL'],getPrecision($obs['lumErrL'])); ?></sub>
+</span>
+</td>
+<td> <a href='fitDetails.php?fitsID=<?php echo $obs['fitsID']; ?>'><?php echo $obs['model']; ?></a></td>
+<td> <?php echo refLink($obs['fluxRef']) ?></td>
+<td> <?php echo refLink($obs['dateObservedRef']) ?></td>
+
+</tr>
+<?php 
+} 
+?>
+</table>
+<?php
+}
 
 
 
 
 
-/*
+
 //Table to automatically use array keys as columns, given a 2d array
-function lazyTable($array) {
+function lazyTable($array) {?>
+<table>
+<thead>
+<th>
+<?php 
+echo implode('</th><th>', array_keys(current($array))); 
+?>
+</th>
+</thead>
+<?php
 foreach($array as $key=>$row){    
+?>
+<tr>
+<td>
+<?php
+echo implode('</td><td>', $row);
+?>
+</td>
+</tr>
+<?php
 }
+?>
+</table>
+<?php
 }
-*/
 
 
 
