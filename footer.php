@@ -1,7 +1,10 @@
+
 </div>
 <div id='push'></div>
 </div>
 <div id ='footer'>
-Some footer text
+<?php
+dispPeakMem();
+?>
 </div>
 </body>

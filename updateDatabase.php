@@ -1,5 +1,4 @@
 <?php
-include 'debugFunc.php';   
 include 'connect.php';
 include 'header.php';
 
@@ -94,7 +93,7 @@ foreach($fits as $key=> $fit){
 
 //Add Parameters
 try {
-    $stmt = $conn -> query("SELECT fitsID, parameter, value, newFitsID FROM ParametersNew");
+    $stmt = $conn -> query("SELECT fitsID, parameter, value, newFitsID, uploadSet FROM ParametersNew");
     $parameters = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 catch (PDOException $e) {
@@ -103,12 +102,13 @@ catch (PDOException $e) {
 
 foreach($parameters as $key=>$value){
     try {
-        $stmt = $conn -> prepare("INSERT INTO ParametersNew(fitsID, parameter, value) VALUES(:fitsID, :parameter, :value)");
+        $stmt = $conn -> prepare("INSERT INTO Parameters(fitsID, parameter, value, uploadSet) VALUES(:fitsID, :parameter, :value, :uploadSet)");
         $params = array();
         if (!empty($value['fitsID'])){$params[':fitsID'] = $value['fitID'];}
         else{$params[':fitsID'] = $newFitsIDs[$value['newFitsID']];}
         $params[':parameter'] = $value['parameter'];
         $params[':value'] = $value['value'];
+        $params[':uploadSet'] = $value['uploadSet'];
         $stmt ->execute($params);
     }
     catch (PDOException $e) {

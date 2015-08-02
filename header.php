@@ -27,3 +27,8 @@
 </ul>
 </div>
 <div id='content'>
+
+
+<?php
+include 'debugFunc.php';//for debugging
+?>

@@ -1,7 +1,6 @@
 <?php
 //This file loads way more into memory than necessary
 //In case of slowdowns, may become necessary to add separate queries
-include 'debugFunc.php';
 include 'header.php';
 include 'calculations.php';
 include 'tables.php';

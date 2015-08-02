@@ -1,6 +1,4 @@
 <?php
-
-include 'debugFunc.php';
 include 'connect.php';
 include 'header.php';
 try {
@@ -126,11 +124,12 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
 //                $result[$i]['newFitsID']=0;
             }
             try {
-                $stmt = $conn -> prepare("INSERT INTO ParametersNew(fitsID, parameter, value, newFitsID) VALUES(:fitsID, :parameter, :value, :newFitsID)");
+                $stmt = $conn -> prepare("INSERT INTO ParametersNew(fitsID, parameter, value, newFitsID, uploadSet) VALUES(:fitsID, :parameter, :value, :newFitsID, :uploadSet)");
                 $stmt -> bindValue(':fitsID',$result[$i]['fitsID']);
                 $stmt -> bindValue(':newFitsID',$result[$i]['newFitsID']);
                 $stmt -> bindValue(':parameter',$param);
                 $stmt -> bindValue(':value',$paramValue);
+                $stmt -> bindValue(':uploadSet', $_POST['uploadSet']);
                 $stmt -> execute();
             }       
             catch (PDOException $e) {

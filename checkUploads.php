@@ -1,5 +1,4 @@
 <?php
-include 'debugFunc.php';
 include 'calculations.php';
 include 'tables.php';
 include 'header.php';
