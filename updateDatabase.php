@@ -31,6 +31,9 @@ foreach($novae as $key=>$nova) {
     }
 }
 
+
+
+
 //Observations Update
 try{
     $stmt = $conn->query("SELECT name, dateObserved, dateObservedRef, instrument, uploadSet, newObsID FROM ObservationsNew");
@@ -116,6 +119,21 @@ foreach($parameters as $key=>$value){
     }
 
 }
+
+//clean out staging area
+try{
+    $stmt =  $conn->query("DELETE FROM ObservationsNew");
+    $stmt =  $conn->query("DELETE FROM NovaeNew");
+    $stmt =  $conn->query("DELETE FROM FitsNew");
+    $stmt =  $conn->query("DELETE FROM ParametersNew");
+}
+catch (PDOException $e){
+    echo $e -> getMessage();
+}
+
+
+
+
 
 
 include 'footer.php';

@@ -2,7 +2,7 @@
 include 'connect.php';
 include 'header.php';
 try {
-    $stmt = $conn-> query("SELECT name From Novae");
+    $stmt = $conn-> query("SELECT name FROM Novae");
     $names = $stmt -> fetchAll(PDO::FETCH_ASSOC);
 }
 catch (PDOException $e){
@@ -19,7 +19,7 @@ $result = array();
 $newObs = array();
 $newFits = array();
 
-$knownFields = array('name','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
+$knownFields = array('redshift', 'redishiftRef','name','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
 
 
 $i = 0;
@@ -41,9 +41,10 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
 
 //check for new novae included in the file, add new information to Novae
         if (!in_array($result[$i]['name'], $names) && (!empty($result[$i]['name']))) {
+            beep();
             $names[] = $result[$i]['name'];
             try{
-                $stmt = $conn -> prepare('INSERT INTO NovaeNew(name, type, dateExploded,dateExplodedRef,distance,distRef,uploadSet) VALUES(:name,:type,:dateExploded,:dateExplodedRef,:distance,:distRef,:uploadSet)');
+                $stmt = $conn -> prepare('INSERT INTO NovaeNew(name, type, dateExploded,dateExplodedRef,distance,distRef,uploadSet,redshift,redshiftRef) VALUES(:name,:type,:dateExploded,:dateExplodedRef,:distance,:distRef,:uploadSet, :redshift, :redshiftRef)');
                 $params = array();
                 $params[':uploadSet']=$_POST['uploadSet'];
                 $params[':name'] = $result[$i]['name'];
@@ -52,6 +53,8 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
                 $params[':dateExplodedRef'] = $result[$i]['dateExplodedRef'];
                 $params[':distance'] = $result[$i]['distance'];
                 $params[':distRef'] = $result[$i]['distRef'];
+                $params[':redshift'] = $result[$i]['redshift'];
+                $params[':redshiftRef'] = $result[$i]['redshiftRef'];
                 $stmt -> execute($params);
             } 
             catch (PDOException $e) {
