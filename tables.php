@@ -16,8 +16,10 @@ function displayTable($novae,$observations){
 <th>Type</th>
 <th>Date Exploded (MJD)</th>
 <th>Distance (Mpc)</th>
+<th>Redshift</th>
 <th>Distance Reference</th>
 <th>Date Reference</th>
+<th>Redshift Reference</th>
 </tr>
 </thead>
 <?php
@@ -41,8 +43,10 @@ foreach ($novae as $name=>$row) {
     } else {
 echo removeZeros($novae[$name]['dateExploded'],0);}?></td>
 <td> <?php echo removeZeros($row['distance'],2); ?></td>
+<td> <?php echo removeZeros($row['redshift'],getPrecision($row['redshift'])); ?></td>
 <td> <?php echo refLink($row['distRef']) ?></td>
 <td> <?php echo refLink($row['dateExplodedRef']) ?></td>
+<td> <?php echo refLink($row['redshiftRef']); ?></td>
 </tr>
 
 <tr class = 'details' id = '<?php echo $name;?>' style="display:none;">

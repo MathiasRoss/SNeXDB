@@ -6,7 +6,7 @@ $startTime=microtime(TRUE);
 
 function dispTime($time){
     $endTime = microtime(TRUE);
-    echo 'Page loaded in ~'.number_format($endTime-$time, 4).' seconds';
+    echo 'Scripts completed in ~'.number_format($endTime-$time, 4).' seconds';
 
 }
 

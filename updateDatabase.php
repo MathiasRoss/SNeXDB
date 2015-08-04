@@ -2,20 +2,33 @@
 include 'connect.php';
 include 'header.php';
 
-//Novae update
+//get information from the staging area
 try{
-    $stmt = $conn->query("SELECT name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet FROM NovaeNew");
+    $stmt = $conn->prepare("SELECT name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet, redshift, redshiftRef FROM NovaeNew WHERE uploadSet = :setName");
+    $stmt->execute(array(':setName'=>$_POST['setName']));
     $novae = $stmt->fetchAll(PDO::FETCH_ASSOC);
-     
-
-} 
+    $stmt = $conn->prepare("SELECT name, dateObserved, dateObservedRef, instrument, uploadSet, newObsID FROM ObservationsNew WHERE uploadSet=:setName");
+    $stmt->execute(array(':setName'=>$_POST['setName']));
+    $observations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn -> prepare("SELECT fitsID, obsID, newObsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet FROM FitsNew WHERE uploadSet = :setName");
+    $stmt->execute(array(':setName'=>$_POST['setName']));
+    $fits = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn -> prepare("SELECT fitsID, parameter, value, newFitsID, uploadSet FROM ParametersNew WHERE uploadSet = :setName");
+    $stmt->execute(array(':setName'=>$_POST['setName']));
+    $parameters = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 catch (PDOException $e) {
     echo $e -> getMessage();
 }
 
+
+$conn->beginTransaction();
+
+
+//Novae update
 foreach($novae as $key=>$nova) {
     try{
-        $stmt = $conn->prepare("INSERT INTO Novae(name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet) VALUES(:name, :type, :dateExploded, :dateExplodedRef, :distance, :distRef, :uploadSet)");
+        $stmt = $conn->prepare("INSERT INTO Novae(name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet, redshift, redshiftRef) VALUES(:name, :type, :dateExploded, :dateExplodedRef, :distance, :distRef, :uploadSet, :redshift, :redshiftRef)");
         $params = array();
         $params[':name'] = $nova['name'];
         $params[':type'] = $nova['type'];
@@ -24,7 +37,9 @@ foreach($novae as $key=>$nova) {
         $params[':distance'] = $nova['distance'];
         $params[':distRef'] = $nova['distRef'];
         $params[':uploadSet'] = $nova['uploadSet'];
-        $stmt -> execute($nova);
+        $params[':redshift'] = $nova['redshift'];
+        $params[':redshiftRef'] =$nova['redshiftRef'];
+        $stmt -> execute($params);
     }
     catch (PDOException $e) {
         echo $e -> getMessage();
@@ -35,14 +50,6 @@ foreach($novae as $key=>$nova) {
 
 
 //Observations Update
-try{
-    $stmt = $conn->query("SELECT name, dateObserved, dateObservedRef, instrument, uploadSet, newObsID FROM ObservationsNew");
-    $observations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-catch (PDOException $e){
-    echo $e -> getMessage();
-} 
-
 $newObsIDs = array();
 foreach ($observations as $obs) {
     try{
@@ -62,14 +69,6 @@ foreach ($observations as $obs) {
 }
 
 //fits update
-try {
-    $stmt = $conn -> query("SELECT fitsID, obsID, newObsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet FROM FitsNew");
-    $fits = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-}
-catch (PDOException $e) {
-    echo $e->getMessage();
-}
-
 $newFitsIDs = array();
 foreach($fits as $key=> $fit){
     try {
@@ -95,14 +94,6 @@ foreach($fits as $key=> $fit){
 
 
 //Add Parameters
-try {
-    $stmt = $conn -> query("SELECT fitsID, parameter, value, newFitsID, uploadSet FROM ParametersNew");
-    $parameters = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-catch (PDOException $e) {
-    echo $e -> getMessage();
-}
-
 foreach($parameters as $key=>$value){
     try {
         $stmt = $conn -> prepare("INSERT INTO Parameters(fitsID, parameter, value, uploadSet) VALUES(:fitsID, :parameter, :value, :uploadSet)");
@@ -122,17 +113,21 @@ foreach($parameters as $key=>$value){
 
 //clean out staging area
 try{
-    $stmt =  $conn->query("DELETE FROM ObservationsNew");
-    $stmt =  $conn->query("DELETE FROM NovaeNew");
-    $stmt =  $conn->query("DELETE FROM FitsNew");
-    $stmt =  $conn->query("DELETE FROM ParametersNew");
+    $stmt =  $conn->prepare("DELETE FROM ObservationsNew WHERE uploadSet = :setName");
+    $stmt->execute(array(':setName'=>$_POST['setName']));
+    $stmt =  $conn->prepare("DELETE FROM NovaeNew WHERE uploadSet = :setName");
+    $stmt->execute(array(':setName'=>$_POST['setName']));
+    $stmt =  $conn->prepare("DELETE FROM FitsNew WHERE uploadSet = :setName");
+    $stmt->execute(array(':setName'=>$_POST['setName']));
+    $stmt =  $conn->prepare("DELETE FROM ParametersNew WHERE uploadSet = :setName");
+    $stmt->execute(array(':setName'=>$_POST['setName']));
 }
 catch (PDOException $e){
     echo $e -> getMessage();
 }
 
 
-
+$conn->commit();
 
 
 

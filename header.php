@@ -15,6 +15,7 @@
 <div id='wrapper'>
 
 <div id='header'>
+<!--<img src="images/logoWhite.gif" alt='logo' />-->
 <h1><a href='http://127.0.0.1'>Supernovae X-Ray Database</a></h1>
 </div>
 

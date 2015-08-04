@@ -35,6 +35,8 @@ foreach($result as $key => $row){
         $novae[$row['name']]['distance']=$result[$key]['distance'];
         $novae[$row['name']]['distRef']=$result[$key]['distRef'];
         $novae[$row['name']]['dateExplodedRef']=$result[$key]['dateExplodedRef'];
+        $novae[$row['name']]['redshift']=$result[$key]['redshift'];
+        $novae[$row['name']]['redshiftRef']=$result[$key]['redshiftRef'];
     }
     $observations[$row['name']][]=$result[$key];
 

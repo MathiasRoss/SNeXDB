@@ -1,6 +1,8 @@
 <?php
 include 'connect.php';
 include 'header.php';
+ 
+
 try {
     $stmt = $conn-> query("SELECT name FROM Novae");
     $names = $stmt -> fetchAll(PDO::FETCH_ASSOC);
@@ -21,7 +23,7 @@ $newFits = array();
 
 $knownFields = array('redshift', 'redishiftRef','name','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
 
-
+$conn->beginTransaction();
 $i = 0;
 if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
     while (($row = fgetcsv($handle, 1000, ",")) !== false) {
@@ -41,7 +43,6 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
 
 //check for new novae included in the file, add new information to Novae
         if (!in_array($result[$i]['name'], $names) && (!empty($result[$i]['name']))) {
-            beep();
             $names[] = $result[$i]['name'];
             try{
                 $stmt = $conn -> prepare('INSERT INTO NovaeNew(name, type, dateExploded,dateExplodedRef,distance,distRef,uploadSet,redshift,redshiftRef) VALUES(:name,:type,:dateExploded,:dateExplodedRef,:distance,:distRef,:uploadSet, :redshift, :redshiftRef)');
@@ -147,5 +148,6 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
     fclose($handle);
     echo "Submitted Succesfully";
 }
+$conn->commit();
 include 'footer.php';
 ?>
