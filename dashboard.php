@@ -65,6 +65,11 @@ foreach($names as $name){
 <input type='submit' value='Edit'>
 </form>
 
+<form action='editFitsForm.php' method='GET'>
+
+<input type=text name='fitsID'>
+<input type='submit' value='Edit'>
+</form>
 
 
 

@@ -76,4 +76,5 @@ foreach($paramNames as $name){
 <?php
 }
 ?>
+<input type='submit' value='Submit'>
 </form>
