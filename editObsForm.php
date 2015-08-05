@@ -46,13 +46,13 @@ foreach($instruments as $instrument){
 ?>
 <option value='new'>New</option>
 </select>
-<input type='text' name='type' placeholder='Enter here if new type (also select "new" in pulldown)'>
+<input type='text' name='instrument' placeholder='Enter here if new instrument (also select "new" in pulldown)'>
 <br>
 Date Observed:<input type='text' name='dateObserved' value='<?php echo htmlspecialchars($observations['dateObserved']);?>'>
 <br>
 Date Observed Ref:<input type='text' name='dateObservedRef' value='<?php echo htmlspecialchars($observations['dateObservedRef']);?>'>
 <br>
-Upload Set:<input type='text' name='uploadRef' readonly='readonly' value='<?php echo htmlspecialchars($observations['uploadSet']); ?>'>
+Upload Set:<input type='text' name='uploadSet' readonly='readonly' value='<?php echo htmlspecialchars($observations['uploadSet']); ?>'>
 <br>
 <input type='submit' value = 'Update'>
 </form>

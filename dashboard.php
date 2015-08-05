@@ -3,10 +3,13 @@ include 'header.php';
 include 'connect.php';
 
 try {
+
     $stmt = $conn->query("SELECT DISTINCT uploadSet FROM Fits");
     $setNames = $stmt -> fetchAll(PDO::FETCH_ASSOC);
     $stmt = $conn->query("SELECT DISTINCT uploadSet FROM FitsNew");
     $setNamesNew = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn -> query("SELECT DISTINCT name FROM Novae");
+    $names= $stmt-> fetchAll(PDO::FETCH_ASSOC);
 }
 catch (PDOException $e) {
     echo $e->getMessage();
@@ -36,7 +39,31 @@ foreach($setNamesNew as $name){
 </select>
 <input type='submit' value="Check">
 </form>
+<hr>
+<br>
 
+
+<form action='editNovaForm.php' method='GET'>
+
+<select name="name">
+<option selected ="selected" value = "" disabled>Object Name</option>
+
+<?php
+foreach($names as $name){
+    echo "<option>" . $name['name'] . "</option>";
+}
+?>
+</select>
+
+<input type='submit' value='edit'>
+</form>
+<br>
+
+<form action='editObsForm.php' method='GET'>
+
+<input type=text name='obsID'>
+<input type='submit' value='Edit'>
+</form>
 
 
 

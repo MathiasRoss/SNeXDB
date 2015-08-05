@@ -7,3 +7,54 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+
+CREATE TRIGGER set_modified_novae
+BEFORE UPDATE ON Novae 
+FOR EACH ROW SET NEW.modified=NOW();
+
+CREATE TRIGGER set_modified_observations
+BEFORE UPDATE ON Observations 
+FOR EACH ROW SET NEW.modified=NOW();
+
+CREATE TRIGGER set_modified_fits
+BEFORE UPDATE ON Fits
+FOR EACH ROW SET NEW.modified=NOW();
+
+CREATE TRIGGER set_modified_parameters
+BEFORE UPDATE ON Parameters
+FOR EACH ROW SET NEW.modified=NOW();
+
+CREATE TRIGGER set_created_novae
+BEFORE INSERT ON Novae
+FOR EACH ROW SET NEW.created=NOW();
+
+CREATE TRIGGER set_created_observations
+BEFORE INSERT ON Observations
+FOR EACH ROW SET NEW.created=NOW();
+
+CREATE TRIGGER set_created_fits
+BEFORE INSERT ON Fits
+FOR EACH ROW SET NEW.created=NOW();
+
+CREATE TRIGGER set_created_parameters
+BEFORE INSERT ON Parameters
+FOR EACH ROW SET NEW.created=NOW();
+
+CREATE TRIGGER set_submit_novae
+BEFORE INSERT ON NovaeNew
+FOR EACH ROW SET NEW.submitted=NOW();
+
+CREATE TRIGGER set_submit_observations
+BEFORE INSERT ON ObservationsNew
+FOR EACH ROW SET NEW.submitted=NOW();
+
+CREATE TRIGGER set_submit_fits
+BEFORE INSERT ON FitsNew
+FOR EACH ROW SET NEW.submitted=NOW();
+
+CREATE TRIGGER set_submit_parameters
+BEFORE INSERT ON ParametersNew
+FOR EACH ROW SET NEW.submitted=NOW();
+
