@@ -23,14 +23,21 @@ function displayTable($novae,$observations){
 </tr>
 </thead>
 <?php
+$isOdd = false;
 foreach ($novae as $name=>$row) {
     if (!empty($_GET['MJD'])){
         $novae[$name]['dateExploded'] = jdtojulian(mjdtojd($row['dateExploded']));
     }
 
-
+    if ($isOdd){
+       echo "<tr class='odd'>";
+        $isOdd=false;
+    }
+    else{
+       echo "<tr class='even'>";
+        $isOdd=true;
+    }
 ?>
-<tr>
 <td>
 <a href="javascript:toggleDiv('<?php echo $name; ?>')" style="color:black; text-decoration:none;">
 <span  id='<?php echo $name.'Button'; ?>'>+</span></a>
