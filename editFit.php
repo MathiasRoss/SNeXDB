@@ -36,10 +36,11 @@ foreach($parameters as $param)
 {
     $values=array();
     $values[':fitsID'] = $_POST['fitsID'];
-    $values[':parameter'] = $_POST[$param['parameter']];
+    $values[':parameter'] = $param['parameter'];
+    $values[':newParameter'] = $_POST[$param['parameter']];
     $values[':value'] = $_POST[$param['parameter'].'Value'];
     try{
-        $stmt = $conn->prepare("UPDATE Parameters SET value=:value WHERE parameter=:parameter AND fitsID=:fitsID");
+        $stmt = $conn->prepare("UPDATE Parameters SET parameter=:newParameter, value=:value WHERE parameter=:parameter AND fitsID=:fitsID");
         $stmt->execute($values);
     }
     catch (PDOException $e){

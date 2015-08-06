@@ -1,5 +1,6 @@
 <?php
 include 'connect.php';
+include 'header.php';
 
 try {
     $stmt = $conn->query("SELECT DISTINCT model FROM Fits");
@@ -43,9 +44,8 @@ foreach($models as $model){
 <br>
 Flux:<input type='text' name='flux' value='<?php echo htmlspecialchars($fit['flux']); ?>'>
 <br>
-Flux Low Error:<input type='text' name='fluxErrL' value='<?php echo htmlspecialchars($fit['fluxErrL']); ?>'>
-<br>
-Flux High Error:<input type='text' name='fluxErrH' value='<?php echo htmlspecialchars($fit['fluxErrH']); ?>'>
+Flux Error (Low):<input type='text' name='fluxErrL' value='<?php echo htmlspecialchars($fit['fluxErrL']); ?>'>
+High:<input type='text' name='fluxErrH' value='<?php echo htmlspecialchars($fit['fluxErrH']); ?>'>
 <br>
 Flux Energy Range (Low):<input type='text' name='fluxEnergyL' value='<?php echo htmlspecialchars($fit['fluxEnergyL']); ?>'>
 (High):<input type='text' name='fluxEnergyH' value='<?php echo htmlspecialchars($fit['fluxEnergyH']); ?>'>
@@ -78,3 +78,6 @@ foreach($paramNames as $name){
 ?>
 <input type='submit' value='Submit'>
 </form>
+<?php 
+include 'footer.php';
+?>
