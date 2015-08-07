@@ -4,7 +4,7 @@ include 'header.php';
 
 //get information from the staging area
 try{
-    $stmt = $conn->prepare("SELECT name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet, redshift, redshiftRef FROM NovaeNew WHERE uploadSet = :setName");
+    $stmt = $conn->prepare("SELECT name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet, redshift, redshiftErr, redshiftRef FROM NovaeNew WHERE uploadSet = :setName");
     $stmt->execute(array(':setName'=>$_POST['setName']));
     $novae = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $stmt = $conn->prepare("SELECT name, dateObserved, dateObservedRef, instrument, uploadSet, newObsID FROM ObservationsNew WHERE uploadSet=:setName");
@@ -28,7 +28,7 @@ $conn->beginTransaction();
 //Novae update
 foreach($novae as $key=>$nova) {
     try{
-        $stmt = $conn->prepare("INSERT INTO Novae(name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet, redshift, redshiftRef) VALUES(:name, :type, :dateExploded, :dateExplodedRef, :distance, :distRef, :uploadSet, :redshift, :redshiftRef)");
+        $stmt = $conn->prepare("INSERT INTO Novae(name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet, redshift, redshiftRef) VALUES(:name, :type, :dateExploded, :dateExplodedRef, :distance, :distRef, :uploadSet, :redshift,:redshiftErr, :redshiftRef)");
         $params = array();
         $params[':name'] = $nova['name'];
         $params[':type'] = $nova['type'];
@@ -38,6 +38,7 @@ foreach($novae as $key=>$nova) {
         $params[':distRef'] = $nova['distRef'];
         $params[':uploadSet'] = $nova['uploadSet'];
         $params[':redshift'] = $nova['redshift'];
+        $params[':redshiftErr'] = $nova['redshiftErr'];
         $params[':redshiftRef'] =$nova['redshiftRef'];
         $stmt -> execute($params);
     }

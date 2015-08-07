@@ -21,7 +21,7 @@ $result = array();
 $newObs = array();
 $newFits = array();
 
-$knownFields = array('redshift', 'redshiftRef','name','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
+$knownFields = array('redshift', 'redshiftErr','redshiftRef','name','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
 
 $conn->beginTransaction();
 $i = 0;
@@ -45,7 +45,7 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
         if (!in_array($result[$i]['name'], $names) && (!empty($result[$i]['name']))) {
             $names[] = $result[$i]['name'];
             try{
-                $stmt = $conn -> prepare('INSERT INTO NovaeNew(name, type, dateExploded,dateExplodedRef,distance,distRef,uploadSet,redshift,redshiftRef) VALUES(:name,:type,:dateExploded,:dateExplodedRef,:distance,:distRef,:uploadSet, :redshift, :redshiftRef)');
+                $stmt = $conn -> prepare('INSERT INTO NovaeNew(name, type, dateExploded,dateExplodedRef,distance,distRef,uploadSet,redshift,redshiftErr,redshiftRef) VALUES(:name,:type,:dateExploded,:dateExplodedRef,:distance,:distRef,:uploadSet, :redshift, :redshiftErr,:redshiftRef)');
                 $params = array();
                 $params[':uploadSet']=$_POST['uploadSet'];
                 $params[':name'] = $result[$i]['name'];
@@ -55,6 +55,7 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
                 $params[':distance'] = $result[$i]['distance'];
                 $params[':distRef'] = $result[$i]['distRef'];
                 $params[':redshift'] = $result[$i]['redshift'];
+                $params[':redshiftErr'] = $result[$i]['redshiftErr'];
                 $params[':redshiftRef'] = $result[$i]['redshiftRef'];
                 $stmt -> execute($params);
             } 
