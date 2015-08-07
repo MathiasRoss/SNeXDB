@@ -19,6 +19,10 @@ function getPrecision($error)
     else{return 2;}
 }
 
+function getMag($value)
+{
+    return floor(log10($value));
+}
 
 function removeZeros($value,$precision){
     return round($value*pow(10,$precision))/pow(10,$precision);

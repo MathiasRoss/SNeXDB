@@ -28,7 +28,7 @@ $conn->beginTransaction();
 //Novae update
 foreach($novae as $key=>$nova) {
     try{
-        $stmt = $conn->prepare("INSERT INTO Novae(name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet, redshift, redshiftRef) VALUES(:name, :type, :dateExploded, :dateExplodedRef, :distance, :distRef, :uploadSet, :redshift,:redshiftErr, :redshiftRef)");
+        $stmt = $conn->prepare("INSERT INTO Novae(name, type, dateExploded, dateExplodedRef, distance, distRef, uploadSet, redshift, redshiftErr, redshiftRef) VALUES(:name, :type, :dateExploded, :dateExplodedRef, :distance, :distRef, :uploadSet, :redshift,:redshiftErr, :redshiftRef)");
         $params = array();
         $params[':name'] = $nova['name'];
         $params[':type'] = $nova['type'];

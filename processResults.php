@@ -13,19 +13,23 @@ foreach($result as $key => $row){
     $result[$key]['flux']=removeZeros($row['flux'],getPrecision($row['fluxErrL']));
     $result[$key]['fluxErrL'] = removeZeros($row['fluxErrL'],getPrecision($row['fluxErrL']));
     $result[$key]['fluxErrH'] = removeZeros($row['fluxErrH'],getPrecision($row['fluxErrH']));
-
+    
     $result[$key]['dateObserved']=removeZeros($row['dateObserved'],0);
     $result[$key]['dateExploded']=removeZeros($row['dateExploded'],0);
     $result[$key]['age'] = removeZeros($row['age'],0);
-
+    
     $result[$key]['fluxEnergyL']=removeZeros($row['fluxEnergyL'],getPrecision($row['fluxEnergyL']));
     $result[$key]['fluxEnergyH']=removeZeros($row['fluxEnergyH'],getPrecision($row['fluxEnergyH']));
-
-    $lumErrMag = floor(log10($result[$key]['lumErrL']));
-    $result[$key]['lum'] = roundToMag($result[$key]['lum'],$lumErrMag);
-    $result[$key]['lumErrL'] = roundToMag($result[$key]['lumErrL'],$lumErrMag);
-    $result[$key]['lumErrH'] = roundToMag($result[$key]['lumErrH'],$lumErrMag);
-
+    
+    if (!empty($result[$key]['lumErrL'])){
+        $lumErrMag = getMag($result[$key]['lumErrL']);
+        $result[$key]['lum'] = roundToMag($result[$key]['lum'],$lumErrMag);
+        $result[$key]['lumErrL'] = roundToMag($result[$key]['lumErrL'],$lumErrMag);
+        $result[$key]['lumErrH'] = roundToMag($result[$key]['lumErrH'],$lumErrMag);
+    }
+    else {
+        $result[$key]['lum'] = roundToMag($result[$key]['lum'],getMag($result[$key]['lum']));
+    }
 
 
 
