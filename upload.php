@@ -95,10 +95,14 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
             $result[$i]['dateObserved']=$oldObs[$result[$i]['obsID']]['dateObserved'];
             $result[$i]['dateObservedRef']=$oldObs[$result[$i]['obsID']]['dateObservedRef'];
             $result[$i]['instrument']=$oldObs[$result[$i]['obsID']]['instrument'];
-        } else if ((!in_array($result[$i]['localObsID'],$newObs))&&(!empty($result[$i]['dateObserved']))){//record new observation info for display
-            $observations[]=$result[$i];//has excess info
+            $result[$i]['dateExploded']=$oldNovae[$oldObs[$result[$i]['obsID']]['name']]['dateExploded'];
+        }
+//or if a new observation 
+        else if ((!in_array($result[$i]['localObsID'],$newObs))&&(!empty($result[$i]['dateObserved']))){
+
+            $observations[$i]=$result[$i];//has excess info; $i a conveient index
             if (!empty($result[$i]['localObsID'])){
-                $newObs[] = $result[$i]['localObsID'];
+                $newObs[$i] = $result[$i]['localObsID'];
             }
         }
 
@@ -106,10 +110,18 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
 
 
 //check for new novae included in the file, fill $novae with the new nova information
-        if ((!in_array($result[$i]['name'], $names)) && !in_array($result[$i]['name'], $newNames)) {
+        if ((!in_array($result[$i]['name'], $names)) && !in_array($result[$i]['name'], $newNames) && !empty($result[$i]['type'])) {
             $newNames[] = $result[$i]['name'];
             $novae[$result[$i]['name']] = $result[$i];//has some excess info
+        } 
+//if from old novae, need some info for calculations:
+        else if ((!in_array($result[$i]['name'],$newNames)) && !empty($result[$i]['type'])){
+            $result[$i]['dateExploded']=$oldNovae[$result[$i]['name']]['dateExploded'];
+            $result[$i]['distance']=$oldNovae[$result[$i]['name']]['distance'];
         }
+
+
+
 
 //checks for new types
         if (!in_array($result[$i]['type'], $types)) {
@@ -124,47 +136,56 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
     fclose($handle);
 }
 echo 'New novae to be added: <br>';
-include 'novaeTable.php';
+table(array('name','type','dateExploded','distance','redshift','distRef','redshiftRef','dateExplodedRef'),$novae);
 echo 'New observations to be added: <br>';
-include 'obsTable.php';
-echo 'New analysis and measurements to be added: <br>';
+
 $novae = array_merge($novae,$oldNovae);
+foreach($observations as $key=>$row){
+    $observations[$key]['age'] = $row['dateObserved']-$novae[$row['name']]['dateExploded'];
+}
+
+
+table(array('name','dateObserved','age','instrument','fluxRef'),$observations);
+echo 'New analysis and measurements to be added: <br>';
+
 //fill in missing information and remove rows that aren't for new fits
 foreach ($result as $key=>$row){
     if (empty($result[$key]['flux'])){
         unset($result[$key]);
         continue;
     }
-    if (empty($result[$key]['type'])){
-        $result[$key]['type'] = $novae[$row['name']]['type'];
+    if (!empty($result[$key]['localObsID'])) {
+        $result[$key]['name']=$observations[array_search($result[$key]['localObsID'],$newObs)]['name'];
+        $result[$key]['dateObserved']=$observations[array_search($result[$key]['localObsID'],$newObs)]['dateObserved'];
+        $result[$key]['instrument']=$observations[array_search($result[$key]['localObsID'],$newObs)]['instrument'];
     }
     if (empty($result[$key]['dateExploded'])){
-        $result[$key]['dateExploded'] = $novae[$row['name']]['dateExploded'];
+        $result[$key]['dateExploded'] = $novae[$result[$key]['name']]['dateExploded'];
     }
-    if (empty($result[$key]['dateExplodedRef'])){
-        $result[$key]['dateExplodedRef'] = $novae[$row['name']]['dateExplodedRef'];
+    if (empty($result[$key]['dateExplodedRef'])&& isset($observations[$key])){
+        $result[$key]['dateExplodedRef'] = $novae[$observations[$key]['name']]['dateExplodedRef'];
     }
 
     if (empty($result[$key]['distance'])){
-        $result[$key]['distance'] = $novae[$row['name']]['distance'];
+        $result[$key]['distance'] = $novae[$result[$key]['name']]['distance'];
     }
     if (empty($result[$key]['distRef'])){
-        $result[$key]['distRef'] = $novae[$row['name']]['distRef'];
+        $result[$key]['distRef'] = $novae[$result[$key]['name']]['distRef'];
     }
     $result[$key]['lum']=getLum($result[$key]['distance'],$result[$key]['flux']);
     $result[$key]['age']=getAge($result[$key]['dateObserved'],$result[$key]['dateExploded']);
-    $result[$key]['obsID'] = $key;
+    $result[$key]['ID'] = $key;
 
 }
-include 'processResults.php';
-detailsTable($result);
+//include 'processResults.php';
+//detailsTable($result);
+table(array('ID','name','dateObserved','age','instrument','flux','fluxEnergyL','model','fluxRef','dateObservedRef'),$result);
 foreach ($modelParams as $key=>$paramTableArray) {
     echo 'paramaters associated with '.$key.':';
     include 'modelTable.php';
 }
 
 
-dispPeakMem();
 
 
 include 'footer.php';

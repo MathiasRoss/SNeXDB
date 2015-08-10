@@ -28,7 +28,7 @@ foreach($result as $key => $row){
         $result[$key]['lumErrH'] = roundToMag($result[$key]['lumErrH'],$lumErrMag);
     }
     else {
-        $result[$key]['lum'] = roundToMag($result[$key]['lum'],getMag($result[$key]['lum']));
+        $result[$key]['lum'] = roundToMag($result[$key]['lum'],getMag($result[$key]['lum']/10));
     }
 
 

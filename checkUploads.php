@@ -32,10 +32,12 @@ if (!empty($_POST['setName'])){
     }
 }
 echo 'Novae in staging area: <br>';
-novaeTable($novae);
+if(!empty($novae)){
+    smartTable($novae);
+}
 echo 'Observations in staging area: <br>';
-obsTable($observations);
+smartTable($observations);
 echo 'Fits and analysis in staging area: <br>';
-lazyTable($fits);
+smartTable($fits);
 include 'footer.php';
 ?>

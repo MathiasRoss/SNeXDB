@@ -10,6 +10,10 @@ if (isset($_GET['objid'])){
     include 'exportButton.php';
     echo '<hr>';
     displayTable($novae,$observations);
+
+    $novaeFields=array('name','type','distance','distRef');
+    table($novaeFields,$result);
+    
     if(!isset($_GET["graph"])){
         include 'plot.php';
     }

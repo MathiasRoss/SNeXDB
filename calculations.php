@@ -1,4 +1,8 @@
 <?php
+function dispDate($date) {
+   return removeZeros($date, 1);
+}
+
 
 function getAge($date_observed,$date_explosion){
     return $date_observed-$date_explosion;
