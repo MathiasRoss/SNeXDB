@@ -7,17 +7,16 @@ include 'connect.php';
 include 'searchForm.php';
 if (isset($_GET['objid'])){
     include 'search.php';
-    include 'exportButton.php';
     echo '<hr>';
-    displayTable($novae,$observations);
-
-    $novaeFields=array('name','type','distance','distRef');
-    table($novaeFields,$result);
-    
-    if(!isset($_GET["graph"])){
-        include 'plot.php';
+    echo $count.' results returned';
+    if ($count !=0){
+        displayTable($novae,$observations);
+        if(!isset($_GET["graph"])){
+//            include 'plot.php';
+        }
     }
 }
+include 'exportButton.php';
 include 'footer.php';
 
 ?>

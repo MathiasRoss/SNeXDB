@@ -41,13 +41,15 @@ foreach($result as $key => $row){
         $novae[$row['name']]['dateExplodedRef']=$result[$key]['dateExplodedRef'];
         $novae[$row['name']]['redshift']=$result[$key]['redshift'];
         $novae[$row['name']]['redshiftRef']=$result[$key]['redshiftRef'];
+        $novae[$row['name']]['count'] = 0;
     }
     $observations[$row['name']][]=$result[$key];
 
+    $novae[$row['name']]['count']++;
 
 }
 
-
+//echo $result[0]['fullCount'];
 
 //$jsonTable = json_encode($result);
 

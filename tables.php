@@ -41,7 +41,7 @@ foreach ($novae as $name=>$row) {
 <td>
 <a href="javascript:toggleDiv('<?php echo $name; ?>')" style="color:black; text-decoration:none;">
 <span  id='<?php echo $name.'Button'; ?>'>+</span></a>
-<?php echo $name; ?></td>
+<?php echo $name.' ('.$row['count'].')'; ?></td>
 <td> <?php echo $row['type']; ?> </td>
 <td> <?php 
 
@@ -93,6 +93,7 @@ function modelPopup(d) {
     $('#'+popupId).dialog();
     console.log('Hi');
 }
+
 </script>
 <?php
 

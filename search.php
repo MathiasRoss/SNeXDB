@@ -50,37 +50,57 @@ if ($_GET['fluxMax'] != ""){
 //lum search
 if ($_GET['lumMin'] != ""){
     $query = $query . "AND getLum(Fits.flux,Novae.distance) >= :lumMin";
-    $params['lumMin'] = $_GET['lumMin'];
+    $params[':lumMin'] = $_GET['lumMin'];
 }
 if ($_GET['lumMax'] != ""){
     $query = $query . "AND getLum(Fits.flux,Novae.distance) <= :lumMax";
-    $params['lumMax'] = $_GET['lumMax'];
+    $params[':lumMax'] = $_GET['lumMax'];
 }
 
 //age search
 if ($_GET['ageMin'] != ""){
     $query = $query . "AND (dateObserved-dateExploded) >= :ageMin";
-    $params['ageMin'] = $_GET['ageMin'];
+    $params[':ageMin'] = $_GET['ageMin'];
 }
 if ($_GET['ageMax'] != ""){
     $query = $query . "AND (dateObserved-dateExploded) <= :ageMax";
-    $params['ageMax'] = $_GET['ageMax'];
+    $params[':ageMax'] = $_GET['ageMax'];
 }
 
 
 
 $jsonTable = array();
 
+
+//sort and paginate
+$query = $query." ORDER BY Novae.dateExploded, Observations.dateObserved";
+
+
+/*
+if (!empty($_GET['count'])){
+    $query = $query.' LIMIT :start, :count';
+    if (empty($_GET['page'])){
+        $params[':start'] = 0;
+    } 
+    else {
+        $params[':start']=($_GET['page']-1)*$_GET['count'];
+    }
+    $params[':count'] = $_GET['count'];
+}
+*/
+
+
 //run the query and create JSON table
 try {
+    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
     $stmt = $conn -> prepare($query);
     $stmt -> execute($params);
     $result = $stmt -> fetchAll(PDO::FETCH_ASSOC);
+    $count=$stmt->rowCount();
 } 
 catch(PDOException $e) {
     echo $e -> getMessage();
 }
-
 include 'processResults.php';
 
 ?>

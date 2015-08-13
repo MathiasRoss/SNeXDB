@@ -12,7 +12,12 @@ switch($_GET['exportType']){
         $sep = "\t";
         break;
 }
-$fields = array_keys($result[0]);
+if (!empty($_GET['columns'])){
+    $fields = explode(',',$_GET['columns']);
+}
+else {
+    $fields = array_keys($result[0]);
+}
 foreach($fields as $field){
     $string = $string . "\"".$field."\"";
     $string = $string . $sep;
