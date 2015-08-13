@@ -12,7 +12,7 @@ if (isset($_GET['objid'])){
     if ($count !=0){
         displayTable($novae,$observations);
         if(!isset($_GET["graph"])){
-//            include 'plot.php';
+            include 'plot.php';
         }
     }
 }
