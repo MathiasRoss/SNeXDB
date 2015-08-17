@@ -11,7 +11,7 @@ function makeURLParams()
 }
 
 $(document).ready(function() {
-
+var start = performance.now();
 var header = makeURLParams();
 console.log(header[0][1]);
 
@@ -73,10 +73,9 @@ function drawPlot(plot) {
             plot.setData(data);
             plot.setupGrid();
             plot.draw();
-            console.log('BEEP');
+            console.log(performance.now()-start);
         }
     });
 }
 drawPlot(plot);
-
 });

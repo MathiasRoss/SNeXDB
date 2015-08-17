@@ -42,6 +42,7 @@ foreach($result as $key => $row){
         $novae[$row['name']]['redshift']=$result[$key]['redshift'];
         $novae[$row['name']]['redshiftRef']=$result[$key]['redshiftRef'];
         $novae[$row['name']]['count'] = 0;
+        $novae[$row['name']]['redshiftErr']=$result[$key]['redshiftErr'];
     }
     $observations[$row['name']][]=$result[$key];
 

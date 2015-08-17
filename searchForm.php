@@ -20,7 +20,7 @@ catch(PDOException $e) {
 <form method = get action ="index.php">
 
 <!-- Object name pulldown -->
-<select name="objid">
+Object: <select name="objid">
 <option selected ="selected" value = "">Object Name</option>
 
 <?php
@@ -29,11 +29,11 @@ foreach($names as $name){
 }
 ?>
 </select>
+Or name contains:
 <input type="text" name = "name" >
 <br>
-
 <!-- Type search pulldown -->
-<select name="typeid">
+Type:<select name="typeid">
 <option selected = "selected" value ="">Object Type</option>
 
 <?php
@@ -43,9 +43,9 @@ foreach($types as $type){
 ?>
 
 </select>
+Or type contains:
 <input type="text" name="type">
 <br>
-
 <!-- Flux Magnitude Search -->
 Flux is greater than
 <input type="text" name="fluxMin" value=
@@ -59,8 +59,8 @@ and less than
 if (isset($_GET['fluxMax'])){echo $_GET["fluxMax"];}
 ?>
 >
+(x 10<sup>-13</sup> erg cm<sup>-2</sup> s<sup>-1</sup>)
 <br>
-
 
 
 
@@ -77,11 +77,12 @@ and less than
 if (isset($_GET['lumMax'])){echo $_GET["lumMax"];}
 ?>
 >
+(x 10<sup>-37</sup> erg s<sup>-1</sup>)
 <br>
-
 <!-- Instrument name pulldown -->
+Instrument:
 <select name="instrumentid">
-<option selected ="selected" value = "">Instrument</option>
+<option selected ="selected" value = "">Instrument Name</option>
 
 <?php
 foreach($instruments as $key=>$instrument){
@@ -89,6 +90,7 @@ foreach($instruments as $key=>$instrument){
 }
 ?>
 </select>
+or name contains: 
 <input type="text" name = "instrument" >
 <br>
 
@@ -96,7 +98,6 @@ foreach($instruments as $key=>$instrument){
 
 
 
-<br>
 
 <!-- Age Search -->
 Older than

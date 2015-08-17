@@ -4,7 +4,8 @@ $params = array();
 
 
 //write query based on search
-$query = "SELECT Novae.redshift, Novae.redshiftRef, Novae.name,type,dateExploded,dateExplodedRef,distance,distRef,Observations.obsID,dateObserved,dateObservedRef,instrument,fitsID,flux,fluxErrL,fluxErrH,fluxEnergyL,fluxEnergyH,fluxRef,model, getLum(flux,distance) AS lum, (dateObserved-dateExploded) AS age FROM Fits LEFT JOIN Observations ON Fits.obsID = Observations.obsID LEFT JOIN Novae on Observations.name= Novae.name WHERE ";
+$query = "SELECT Novae.redshift, Novae.redshiftErr, Novae.redshiftRef, Novae.name,type,dateExploded,dateExplodedRef,distance,distRef,Observations.obsID,dateObserved,dateObservedRef,instrument,fitsID,flux,fluxErrL,fluxErrH,fluxEnergyL,fluxEnergyH,fluxRef,model, getLum(flux,distance) AS lum, (dateObserved-dateExploded) AS age FROM Fits LEFT JOIN Observations ON Fits.obsID = Observations.obsID LEFT JOIN Novae on Observations.name= Novae.name WHERE ";
+
 
 //object name search
 if ($_GET["objid"] != ""){
@@ -75,8 +76,8 @@ $jsonTable = array();
 //sort and paginate
 $query = $query." ORDER BY Novae.dateExploded, Observations.dateObserved";
 
+$queryCount = "SELECT COUNT(*)".substr($query,315);
 
-/*
 if (!empty($_GET['count'])){
     $query = $query.' LIMIT :start, :count';
     if (empty($_GET['page'])){
@@ -87,7 +88,7 @@ if (!empty($_GET['count'])){
     }
     $params[':count'] = $_GET['count'];
 }
-*/
+
 
 
 //run the query and create JSON table
@@ -96,11 +97,16 @@ try {
     $stmt = $conn -> prepare($query);
     $stmt -> execute($params);
     $result = $stmt -> fetchAll(PDO::FETCH_ASSOC);
-    $count=$stmt->rowCount();
-} 
+    unset($params[':count']);
+    unset($params[':start']);
+    $stmt = $conn -> prepare($queryCount);
+    $stmt -> execute($params);
+    $count = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 catch(PDOException $e) {
     echo $e -> getMessage();
 }
+$count = current(current($count));
 include 'processResults.php';
 
 ?>
