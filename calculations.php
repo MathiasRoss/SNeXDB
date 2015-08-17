@@ -1,6 +1,11 @@
 <?php
-function dispDate($date) {
-   return removeZeros($date, 1);
+function dispDate($date,$mjd) {
+    if ($mjd) {
+        return removeZeros($date, 1);
+    }
+    else {
+       return jdtojulian(mjdtojd($date)); 
+    }
 }
 
 

@@ -12,12 +12,21 @@ switch($_GET['exportType']){
         $sep = "\t";
         break;
 }
-if (!empty($_GET['columns'])){
-    $fields = explode(',',$_GET['columns']);
+switch($_GET['exportFields']){
+    case 'custom':
+        $fields = explode(',',$_GET['columns']);
+        break;
+    case 'all':
+        $fields = array_keys($result[0]);
+        break;
+    case 'lightcurve':
+        $fields = array('name','age','lum');
+        break;
+    case 'lightcurve':
+        $fields = array('name','age','flux');
+        break;
 }
-else {
-    $fields = array_keys($result[0]);
-}
+
 foreach($fields as $field){
     $string = $string . "\"".$field."\"";
     $string = $string . $sep;

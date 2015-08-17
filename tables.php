@@ -8,53 +8,46 @@
  */
 
 function displayTable($novae,$observations){
-?>
-<table id = "novaTable"  class="display" >
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Date Exploded</th>
-<th>Distance (Mpc)</th>
-<th>Redshift</th>
-<th>Distance Reference</th>
-<th>Date Reference</th>
-<th>Redshift Reference</th>
-</tr>
-</thead>
-<?php
-$isOdd = false;
-foreach ($novae as $name=>$row) {
-    if (!empty($_GET['MJD'])){
-        $novae[$name]['dateExploded'] = jdtojulian(mjdtojd($row['dateExploded']));
-    }
+    echo "<table id = 'novaTable'  class='display' ><thead><tr>";
+    fieldHeader('name');
+    fieldHeader('type');
+    fieldHeader('dateExploded');
+    fieldHeader('distance');
+    fieldHeader('redshift');
+    fieldHeader('distRef');
+    fieldHeader('dateExplodedRef');
+    fieldHeader('redshiftRef');    
+    echo "</tr></thead>";
 
-    if ($isOdd){
-       echo "<tr class='odd'>";
-        $isOdd=false;
-    }
-    else{
-       echo "<tr class='even'>";
-        $isOdd=true;
-    }
+    $isOdd = false;
+    foreach ($novae as $name=>$row) {
+ 
+        if ($isOdd){
+           echo "<tr class='odd'>";
+            $isOdd=false;
+        }
+        else{
+           echo "<tr class='even'>";
+            $isOdd=true;
+        }
 ?>
 <td>
-<a href="javascript:toggleDiv('<?php echo $name; ?>')" style="color:black; text-decoration:none;">
-<span  id='<?php echo $name.'Button'; ?>'>+</span></a>
-<?php echo $name.' ('.$row['count'].')'; ?></td>
-<td> <?php echo $row['type']; ?> </td>
-<td> <?php 
+<a id='<?php echo $name.'Button'; ?>' href="javascript:toggleDiv('<?php echo $name; ?>')" style="color:black; text-decoration:none;">+</a>
 
-    if (!empty($_GET['MJD'])){
-        echo jdtojulian(mjdtojd($row['dateExploded']));
-    } else {
-echo removeZeros($novae[$name]['dateExploded'],0);}?></td>
-<td> <?php echo removeZeros($row['distance'],2); ?></td>
-<?php fieldCell('redshift', $novae[$name]); ?>
-<td> <?php echo refLink($row['distRef']) ?></td>
-<td> <?php echo refLink($row['dateExplodedRef']) ?></td>
-<td> <?php echo refLink($row['redshiftRef']); ?></td>
-</tr>
+<?php echo $name.' ('.$row['count'].')'; ?></td>
+<?php
+fieldCell('type',$novae[$name]);
+fieldCell('dateExploded',$novae[$name]);
+fieldCell('distance',$novae[$name]);
+fieldCell('redshift',$novae[$name]);
+fieldCell('distRef',$novae[$name]);
+fieldCell('dateExplodedRef',$novae[$name]);
+fieldCell('redshiftRef',$novae[$name]);
+
+
+echo '</tr>';
+
+?>
 
 <tr class = 'details' id = '<?php echo $name;?>' style="display:none;">
 <td colspan=9>
@@ -70,31 +63,6 @@ detailsTable($observations[$name]);
 ?>
 </table>
 
-<script>
-function toggleDiv(d){
-    if (document.getElementById(d).style.display=="none"){
-        document.getElementById(d).style.display="";
-    } else{ 
-        document.getElementById(d).style.display="none";
-    }
-    var button = d + 'Button';
-    if (document.getElementById(button).innerHTML == '–'){
-        document.getElementById(button).innerHTML = "+";
-    }
-    else {
-        document.getElementById(button).innerHTML = "–";
-    }
-}
-
-function modelPopup(d) {
-    var selector = '#'+d;
-    var popupId = 'model'+d;
-    $('<div/>', {id: popupId}).appendTo(selector);
-    $('#'+popupId).dialog();
-    console.log('Hi');
-}
-
-</script>
 <?php
 
 }
@@ -227,9 +195,15 @@ function fieldHeader($field){
 
 
 function fieldCell ($field, $data){
+    if (empty($_GET['MJD'])){
+        $mjd = true;
+    }
+    else {
+        $mjd = false;
+    }
     switch($field){
         case "dateExploded":
-            echo "<td>".dispDate($data['dateExploded'])."</td>";
+            echo "<td>".dispDate($data['dateExploded'],$mjd)."</td>";
             break;
         case "dateExplodedRef":
             echo "<td>".refLink($data['dateExplodedRef'])."</td>";
@@ -244,7 +218,7 @@ function fieldCell ($field, $data){
             echo "<td>".htmlspecialchars(removeZeros($data['flux'],getPrecision($data['fluxErrL'])))."<sup> +".htmlspecialchars(removeZeros($data['fluxErrH'],getPrecision($data['fluxErrH'])))."</sup><sub> -".htmlspecialchars(removeZeros($data['fluxErrL'],getPrecision($data['fluxErrH'])))."</sub></td>";
             break;
         case "dateObserved":
-            echo "<td>".dispDate($data['dateObserved'])."</td>";
+            echo "<td>".dispDate($data['dateObserved'],$mjd)."</td>";
             break;
         case "dateObservedRef":
             echo "<td>".refLink($data['dateObservedRef'])."</td>";
@@ -253,7 +227,12 @@ function fieldCell ($field, $data){
             echo "<td>".removeZeros($data['fluxEnergyL'],2)." - ".removeZeros($data['fluxEnergyH'],2)."</td>";
             break;
         case "redshift":
-            echo "<td>".htmlspecialchars(removeZeros($data['redshift'],getPrecision($data['redshift']))).' &plusmn;'.htmlspecialchars(sprintf('%f',removeZeros($data['redshiftErr'],getPrecision($data['redshiftErr'])))).'</td>';
+            echo "<td>".htmlspecialchars(removeZeros($data['redshift'],getPrecision($data['redshift'])));
+            if ($data['redshiftErr']!=0){
+                echo '&plusmn;'.htmlspecialchars(sprintf('%f',removeZeros($data['redshiftErr'],getPrecision($data['redshiftErr']))));
+    //            echo gettype((float)$data['redshiftErr']);
+            }
+            echo '</td>';
             break;
         case "redshiftRef":
             echo "<td>".refLink($data['redshiftRef'])."</td>";

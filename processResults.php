@@ -46,6 +46,8 @@ foreach($result as $key => $row){
     }
     $observations[$row['name']][]=$result[$key];
 
+
+
     $novae[$row['name']]['count']++;
 
 }

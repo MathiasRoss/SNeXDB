@@ -1,11 +1,21 @@
-<div id = exportPopup>
+<a id='exportButton' href="javascript:toggleDiv('export')" style="color:black; text-decoration:none;">+</a>
+Export Options:
+<div id = 'export'>
 <form method="get" action= "export.php">
 
 <select name='exportType'>
 <option value='TSV'>TSV</option>
 <option value='CSV'>CSV</option>
 </select>
-
+<br>
+Fields to export:
+<br>
+<select name='exportFields'>
+<option value='custom'>Custom</option>
+<option value='all'>All</option>
+<option value='lightcurve'>Name, Age, Luminosity</option>
+<option value='fluxes'>Name, Age, Flux</option>
+</select>
 <input type='text'name='columns'>
 
 
