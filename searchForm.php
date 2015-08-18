@@ -132,7 +132,15 @@ Show <select name='count'>
 
 Results
 
-
+<br>
+Sort By:
+<select name='sortA'>
+<option value='dateExploded'>Novae Age</option>
+<option value='flux'>Flux</option>
+<option value='distance'>Distance</option>
+<option value='lum'>Luminosity</option>
+</select>
+<br>
 
 
 <input type = "submit" value = "Search">

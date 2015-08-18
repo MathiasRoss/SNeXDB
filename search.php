@@ -73,10 +73,32 @@ if ($_GET['ageMax'] != ""){
 $jsonTable = array();
 
 
-//sort and paginate
-$query = $query." ORDER BY Novae.dateExploded, Observations.dateObserved";
-
 $queryCount = "SELECT COUNT(*)".substr($query,315);
+//sort and paginate
+if (!empty($_GET['sortA'])){
+    $query = $query.' ORDER BY ';
+}
+
+
+function sortBy($sort){
+    switch ($sort) {
+        case 'dateExploded':
+            return 'Novae.dateExploded, Observations.dateObserved';
+            break;
+        case 'flux':
+            return 'flux DESC';
+            break;
+        case 'distance':
+            return 'distance, dateObserved';
+            break;
+        case 'lum':
+            return 'lum DESC';
+            break;
+    }
+}
+
+$query = $query.sortBy($_GET['sortA']);
+
 
 if (!empty($_GET['count'])){
     $query = $query.' LIMIT :start, :count';
