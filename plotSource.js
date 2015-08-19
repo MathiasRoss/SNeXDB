@@ -56,7 +56,7 @@ var points = {errorbars:"y",yerr:{show:true, upperCap: "-", lowerCap: "-", radiu
 
 function drawPlot(plot) {
     $.ajax({
-        url: "ajaxTest.php", 
+        url: "ajaxSearch.php", 
         data: getSend,
         type:'GET', 
         async:true, 
@@ -101,7 +101,21 @@ var data = [];
 var plot = $.plot($('#graph'),data,options);
 
 
-drawPlot(plot);
+
+
+$('#plot').click(function(){
+    if (document.getElementById('graphWrapper').style.display =='none'){
+        document.getElementById('graphWrapper').style.display='';
+        var plot = $.plot($('#graph'),data,options);
+        drawPlot(plot);
+    }
+});
+
+
+
+
+
+
 
 $('#update').click(function(){
     plot.getAxes().xaxis.options.min = $('#xAxisMin').val();

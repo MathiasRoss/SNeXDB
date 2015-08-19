@@ -14,7 +14,7 @@ if (isset($_GET['objid'])){
         include 'paginator.php';
         include 'exportButton.php';
         if(!isset($_GET["graph"])){
-//            include 'plot.php';
+            include 'plot.php';
 
         }
     }
