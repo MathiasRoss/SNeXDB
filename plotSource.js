@@ -116,7 +116,7 @@ function plotSelected(plot) {
             for (i = 0; i < jsonTable.length; i++){
                 console.log(jsonTable[i].fitsID);
                 var id = '#'+jsonTable[i].fitsID;
-                if ($(id).is(':checked')){
+                if (($(id).is(':checked'))&&(jsonTable[i].isUpperBound!=1) ){
                     console.log('beeping');
                     if (labels.indexOf(jsonTable[i].name)==-1){
                         labels.push(jsonTable[i].name);
@@ -132,7 +132,7 @@ function plotSelected(plot) {
             }
             var data= [];
             for (var i = 0; i < labels.length; i ++){
-                obj = {data:dataObj[labels[i]],label:labels[i], points:points};
+                var obj = {data:dataObj[labels[i]],label:labels[i], points:points};
                 data.push(obj);
             }
             unsetAxes(plot);

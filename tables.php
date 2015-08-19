@@ -34,7 +34,7 @@ function displayTable($novae,$observations){
         echo "<td><input type='checkbox' class='novaeBox' id='".$name."'></td>";
         ?>
         <td>
-        <a id='<?php echo $name.'Button'; ?>' href="javascript:toggleDiv('<?php echo $name.'Row'; ?>')" style="color:black; text-decoration:none;">+</a>
+        <a id='<?php echo $name.'RowButton'; ?>' href="javascript:toggleDiv('<?php echo $name.'Row'; ?>')" style="color:black; text-decoration:none;">+</a>
         
         <?php echo $name.' ('.$row['count'].')'; ?></td>
         <?php
