@@ -4,7 +4,7 @@ $params = array();
 
 
 //write query based on search
-$query = "SELECT Novae.redshift, Novae.redshiftErr, Novae.redshiftRef, Novae.name,type,dateExploded,dateExplodedRef,distance,distRef,Observations.obsID,dateObserved,dateObservedRef,instrument,fitsID,flux,fluxErrL,fluxErrH,fluxEnergyL,fluxEnergyH,fluxRef,model, getLum(flux,distance) AS lum, (dateObserved-dateExploded) AS age FROM Fits LEFT JOIN Observations ON Fits.obsID = Observations.obsID LEFT JOIN Novae on Observations.name= Novae.name WHERE ";
+$query = "SELECT Novae.redshift, Novae.redshiftErr, Novae.redshiftRef, Novae.name,type,dateExploded,dateExplodedRef,distance,distRef,Observations.obsID,dateObserved,dateObservedRef,instrument,fitsID,flux,isUpperBound,fluxErrL,fluxErrH,fluxEnergyL,fluxEnergyH,fluxRef,model, getLum(flux,distance) AS lum, (dateObserved-dateExploded) AS age FROM Fits LEFT JOIN Observations ON Fits.obsID = Observations.obsID LEFT JOIN Novae on Observations.name= Novae.name WHERE ";
 
 
 //object name search
@@ -73,7 +73,7 @@ if ($_GET['ageMax'] != ""){
 $jsonTable = array();
 
 
-$queryCount = "SELECT COUNT(*)".substr($query,315);
+$queryCount = "SELECT COUNT(*)".substr($query,328);
 //sort and paginate
 if (!empty($_GET['sortA'])){
     $query = $query.' ORDER BY ';

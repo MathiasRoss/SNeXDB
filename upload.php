@@ -62,7 +62,7 @@ $newObs = array();
 $newFits = array();
 
 
-$knownFields = array('name','redshiftErr','redshift','redshiftRef','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
+$knownFields = array('isUpperBound','name','redshiftErr','redshift','redshiftRef','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
 
 
 

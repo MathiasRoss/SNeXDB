@@ -10,7 +10,7 @@ try{
     $stmt = $conn->prepare("SELECT name, dateObserved, dateObservedRef, instrument, uploadSet, newObsID FROM ObservationsNew WHERE uploadSet=:setName");
     $stmt->execute(array(':setName'=>$_POST['setName']));
     $observations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $stmt = $conn -> prepare("SELECT fitsID, obsID, newObsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet FROM FitsNew WHERE uploadSet = :setName");
+    $stmt = $conn -> prepare("SELECT isUpperBound, fitsID, obsID, newObsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet FROM FitsNew WHERE uploadSet = :setName");
     $stmt->execute(array(':setName'=>$_POST['setName']));
     $fits = $stmt -> fetchAll(PDO::FETCH_ASSOC);
     $stmt = $conn -> prepare("SELECT fitsID, parameter, value, newFitsID, uploadSet FROM ParametersNew WHERE uploadSet = :setName");
@@ -73,7 +73,7 @@ foreach ($observations as $obs) {
 $newFitsIDs = array();
 foreach($fits as $key=> $fit){
     try {
-        $stmt = $conn -> prepare("INSERT INTO Fits(obsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet) VALUES(:obsID, :flux, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model, :uploadSet)");
+        $stmt = $conn -> prepare("INSERT INTO Fits(obsID, flux, isUpperBound, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet) VALUES(:obsID, :flux, :isUpperBound, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model, :uploadSet)");
         $params = array();
         if (!empty($fit['obsID'])){$params[':obsID'] = $fit['obsID'];}
         else {$params[':obsID'] = $newObsIDs[$fit['newObsID']];}
@@ -85,6 +85,7 @@ foreach($fits as $key=> $fit){
         $params[':fluxEnergyH'] = $fit['fluxEnergyH'];
         $params[':fluxRef'] = $fit['fluxRef'];
         $params[':model'] = $fit['model'];
+        $params[':isUpperBound'] = $fit['isUpperBound'];
         $stmt -> execute($params);
         $newFitsIDs[$fit['fitsID']]=$conn->lastInsertId();
     }

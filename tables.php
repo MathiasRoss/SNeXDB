@@ -53,7 +53,7 @@ echo '</tr>';
 <td colspan=9>
 <?php
 
-detailsTable($observations[$name]);
+table(array('obsID','dateObserved','age','instrument','flux','fluxEnergyL','lum','model','fluxRef','dateObservedRef'),$observations[$name],'detailsTable');
 ?>
 
 </td>
@@ -67,59 +67,6 @@ detailsTable($observations[$name]);
 
 }
 
-function detailsTable($observations){
-?>
-<table class="detailsTable" style='white-space:nowrap;table-layout:fixed'>
-<tr>
-<th>Obs. ID</th>
-<th>Obs. Date</th>
-<th>Age (days)</th>
-<th>Instrument</th>
-<th>Flux <br>(x 10<sup>-13</sup> erg cm<sup>-2</sup> s<sup>-1</sup>)</th>
-<th>Energy Range <br>(KeV)</th>
-<th>Luminosity <br> (x 10<sup>37</sup> erg s<sup>-1</sup>)</th>
-<th>Model</th>
-<th>Flux Reference</th>
-<th>Observation Reference</th>
-</tr>
-<?php
-foreach($observations as $obs){ 
-?>
-<tr id=<?php echo $obs['fitsID'];?>>
-<td> <?php echo $obs['obsID'];?></td>
-<td> <?php 
-
-    if (!empty($_GET['MJD'])){
-        echo jdtojulian(mjdtojd($obs['dateObserved']));
-    } else {
-
-echo $obs['dateObserved'];}?></td>
-<td class='age'> <?php echo $obs['age'];?> </td>
-<td> <?php echo $obs['instrument'];?></td>
-<td><?php echo $obs['flux']; ?>
-<span class='supsub'>
-<sup class = 'superscript'>+<?php echo $obs['fluxErrH']; ?></sup>
-<sub class = 'subscript'>-<?php echo $obs['fluxErrL']; ?></sub>
-</span>
-</td>
-<td> <?php echo $obs['fluxEnergyL'].' - '.$obs['fluxEnergyH']; ?></td>
-<td> <?php echo $obs['lum']; ?>
-<span class='supsub'>
-<sup class = 'superscript'>+<?php echo removeZeros($obs['lumErrH'],getPrecision($obs['lumErrH'])); ?></sup>
-<sub class = 'subscript'>-<?php echo removeZeros($obs['lumErrL'],getPrecision($obs['lumErrL'])); ?></sub>
-</span>
-</td>
-<td> <a href='fitDetails.php?fitsID=<?php echo $obs['fitsID']; ?>'><?php echo $obs['model']; ?></a></td>
-<td> <?php echo refLink($obs['fluxRef']) ?></td>
-<td> <?php echo refLink($obs['dateObservedRef']) ?></td>
-
-</tr>
-<?php 
-} 
-?>
-</table>
-<?php
-}
 
 
 
@@ -188,6 +135,9 @@ function fieldHeader($field){
             break;
         case "fluxEnergyH":
             break;
+        case "lum":
+            echo "<th>Luminosity</th>";
+            break;
         default:
             echo "<th>".ucFirst($field)."</th>";
     }
@@ -215,7 +165,15 @@ function fieldCell ($field, $data){
             echo "<td>".refLink($data['distRef'])."</td>";
             break;
         case "flux":
-            echo "<td>".htmlspecialchars(removeZeros($data['flux'],getPrecision($data['fluxErrL'])))."<sup> +".htmlspecialchars(removeZeros($data['fluxErrH'],getPrecision($data['fluxErrH'])))."</sup><sub> -".htmlspecialchars(removeZeros($data['fluxErrL'],getPrecision($data['fluxErrH'])))."</sub></td>";
+            echo "<td>";
+            if ($data['isUpperBound']){
+                echo '<';
+            }
+            echo htmlspecialchars(removeZeros($data['flux'],getPrecision($data['fluxErrL'])));
+            if ($data['fluxErrH']!=0){
+                echo "<sup> +".htmlspecialchars(removeZeros($data['fluxErrH'],getPrecision($data['fluxErrH'])))."</sup><sub> -".htmlspecialchars(removeZeros($data['fluxErrL'],getPrecision($data['fluxErrH'])))."</sub>";
+            }
+            echo "</td>";
             break;
         case "dateObserved":
             echo "<td>".dispDate($data['dateObserved'],$mjd)."</td>";
@@ -230,7 +188,6 @@ function fieldCell ($field, $data){
             echo "<td>".htmlspecialchars(removeZeros($data['redshift'],getPrecision($data['redshift'])));
             if ($data['redshiftErr']!=0){
                 echo '&plusmn;'.htmlspecialchars(sprintf('%f',removeZeros($data['redshiftErr'],getPrecision($data['redshiftErr']))));
-    //            echo gettype((float)$data['redshiftErr']);
             }
             echo '</td>';
             break;
@@ -246,6 +203,17 @@ function fieldCell ($field, $data){
             break;
         case "fluxEnergyH":
             break;
+        case "lum":
+            echo "<td>";
+            if ($data['isUpperBound']){
+                echo '<';
+            }
+            echo htmlspecialchars(removeZeros($data['lum'],getPrecision($data['lumErrL'])));
+            if ($data['lumErrH']!=0){
+                echo "<sup> +".htmlspecialchars(removeZeros($data['lumErrH'],getPrecision($data['lumErrH'])))."</sup><sub> -".htmlspecialchars(removeZeros($data['lumErrL'],getPrecision($data['lumErrH'])))."</sub>";
+            }
+            echo "</td>"; 
+            break;
         default:
             echo "<td>".htmlspecialchars($data[$field])."</td>";
     }
@@ -255,8 +223,8 @@ function fieldCell ($field, $data){
 
 
 //Make a table based on an array of fields
-function table($fields, $data) {
-    echo "<table><thead><tr>";
+function table($fields, $data, $class='',$style='') {
+    echo "<table class ='".$class."' style='".$style."'><thead><tr>";
     foreach($fields as $field){
         fieldHeader($field);
     }

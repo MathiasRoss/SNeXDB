@@ -21,7 +21,7 @@ $result = array();
 $newObs = array();
 $newFits = array();
 
-$knownFields = array('redshift', 'redshiftErr','redshiftRef','name','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
+$knownFields = array('isUpperBound','redshift', 'redshiftErr','redshiftRef','name','type','dateExploded','dateExplodedRef','distance','distRef','obsID','fitsID','localObsID','localFitsID','dateObservedRef','instrument','dateObserved','flux','fluxErrL','fluxErrH','fluxEnergyL','fluxEnergyH','model','fluxRef');
 
 $conn->beginTransaction();
 $i = 0;
@@ -91,8 +91,9 @@ if (($handle = fopen($_FILES['userfile']['tmp_name'],"r")) !== false) {
                 unset($flipped);
             }
             try {
-                $stmt = $conn -> prepare("INSERT INTO FitsNew(obsID, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet, newObsID) VALUES(:obsID, :flux, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model, :uploadSet, :newObsID)");
+                $stmt = $conn -> prepare("INSERT INTO FitsNew(obsID, isUpperBound, flux, fluxErrL, fluxErrH, fluxEnergyL, fluxEnergyH, fluxRef, model, uploadSet, newObsID) VALUES(:obsID, :isUpperBound, :flux, :fluxErrL, :fluxErrH, :fluxEnergyL, :fluxEnergyH, :fluxRef, :model, :uploadSet, :newObsID)");
                 $params = array();
+                $params[':isUpperBound']=$result[$i]['isUpperBound'];
                 $params[':obsID'] = $result[$i]['obsID'];
                 $params[':newObsID']=$result[$i]['newObsID'];
                 $params[':uploadSet']=$_POST['uploadSet'];
