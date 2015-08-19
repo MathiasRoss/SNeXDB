@@ -9,6 +9,7 @@
 
 function displayTable($novae,$observations){
     echo "<table id = 'novaTable'  class='display' ><thead><tr>";
+    fieldHeader('checkBox');
     fieldHeader('name');
     fieldHeader('type');
     fieldHeader('dateExploded');
@@ -30,36 +31,37 @@ function displayTable($novae,$observations){
            echo "<tr class='even'>";
             $isOdd=true;
         }
-?>
-<td>
-<a id='<?php echo $name.'Button'; ?>' href="javascript:toggleDiv('<?php echo $name; ?>')" style="color:black; text-decoration:none;">+</a>
-
-<?php echo $name.' ('.$row['count'].')'; ?></td>
-<?php
-fieldCell('type',$novae[$name]);
-fieldCell('dateExploded',$novae[$name]);
-fieldCell('distance',$novae[$name]);
-fieldCell('redshift',$novae[$name]);
-fieldCell('distRef',$novae[$name]);
-fieldCell('dateExplodedRef',$novae[$name]);
-fieldCell('redshiftRef',$novae[$name]);
-
-
-echo '</tr>';
-
-?>
-
-<tr class = 'details' id = '<?php echo $name;?>' style="display:none;">
-<td colspan=9>
-<?php
-
-table(array('obsID','dateObserved','age','instrument','flux','fluxEnergyL','lum','model','fluxRef','dateObservedRef'),$observations[$name],'detailsTable');
-?>
-
-</td>
-</tr>
-<?php
-}
+        echo "<td><input type='checkbox' class='novaeBox' id='".$name."'></td>";
+        ?>
+        <td>
+        <a id='<?php echo $name.'Button'; ?>' href="javascript:toggleDiv('<?php echo $name.'Row'; ?>')" style="color:black; text-decoration:none;">+</a>
+        
+        <?php echo $name.' ('.$row['count'].')'; ?></td>
+        <?php
+        fieldCell('type',$novae[$name]);
+        fieldCell('dateExploded',$novae[$name]);
+        fieldCell('distance',$novae[$name]);
+        fieldCell('redshift',$novae[$name]);
+        fieldCell('distRef',$novae[$name]);
+        fieldCell('dateExplodedRef',$novae[$name]);
+        fieldCell('redshiftRef',$novae[$name]);
+        
+        
+        echo '</tr>';
+        
+        ?>
+        
+        <tr class = 'details' id = '<?php echo $name.'Row';?>' style="display:none;">
+        <td colspan=9>
+        <?php
+        
+        table(array('checkBox','obsID','dateObserved','age','instrument','flux','fluxEnergyL','lum','model','fluxRef','dateObservedRef'),$observations[$name],'detailsTable',$name.'Table');
+        ?>
+        
+        </td>
+        </tr>
+    <?php
+    }
 ?>
 </table>
 
@@ -67,11 +69,18 @@ table(array('obsID','dateObserved','age','instrument','flux','fluxEnergyL','lum'
 
 }
 
+function checkBox($name){
+    echo "<input type='checkbox' id='".$name."'>";
+}
+
 
 
 
 function fieldHeader($field){
     switch ($field) {
+        case 'checkBox':
+            echo '<th></th>';
+            break;
         case "name":
             echo "<th>Name</th>";
             break;
@@ -88,7 +97,7 @@ function fieldHeader($field){
             echo "<th>Type</th>";
             break;
         case "distance":
-            echo "<th>Distance (Mpc)</th>";
+            echo "<th>Distance </th>";
             break;
         case "distRef":
             echo "<th>Distance Reference</th>";
@@ -152,6 +161,12 @@ function fieldCell ($field, $data){
         $mjd = false;
     }
     switch($field){
+        case "checkBox":
+            $id = $data['fitsID'];
+            echo '<th>';
+            checkBox($id);
+            echo '</th>';
+            break;
         case "dateExploded":
             echo "<td>".dispDate($data['dateExploded'],$mjd)."</td>";
             break;
@@ -223,8 +238,8 @@ function fieldCell ($field, $data){
 
 
 //Make a table based on an array of fields
-function table($fields, $data, $class='',$style='') {
-    echo "<table class ='".$class."' style='".$style."'><thead><tr>";
+function table($fields, $data, $class='',$id='',$style='') {
+    echo "<table class ='".$class."'id='".$id."' style='".$style."'><thead><tr>";
     foreach($fields as $field){
         fieldHeader($field);
     }

@@ -10,7 +10,12 @@ function makeURLParams()
     return params;
 }
 
-
+function unsetAxes(plot){
+    plot.getAxes().xaxis.options.min=null;
+    plot.getAxes().xaxis.options.max=null;
+    plot.getAxes().yaxis.options.min=null;
+    plot.getAxes().yaxis.options.max=null;
+}
 
 
 
@@ -97,21 +102,85 @@ function drawPlot(plot) {
 }
 
 
-var data = [];
-var plot = $.plot($('#graph'),data,options);
+function plotSelected(plot) {
+    $.ajax({
+        url: "ajaxSearch.php", 
+        data: getSend,
+        type:'GET', 
+        async:true, 
+        success:function (result){
+            var labels = [];
+            var dataObj = {};
+            console.log(result);
+            jsonTable = JSON.parse(result);
+            for (i = 0; i < jsonTable.length; i++){
+                console.log(jsonTable[i].fitsID);
+                var id = '#'+jsonTable[i].fitsID;
+                if ($(id).is(':checked')){
+                    console.log('beeping');
+                    if (labels.indexOf(jsonTable[i].name)==-1){
+                        labels.push(jsonTable[i].name);
+                        dataObj[jsonTable[i].name] = [];
+                    }
+                    var row = [];
+                    row[0] = jsonTable[i].age;
+                    row[1] = jsonTable[i].lum;
+                    row[2] = jsonTable[i].lumErrL;
+                    row[3] = jsonTable[i].lumErrH;
+                    dataObj[jsonTable[i].name].push(row);
+                }
+            }
+            var data= [];
+            for (var i = 0; i < labels.length; i ++){
+                obj = {data:dataObj[labels[i]],label:labels[i], points:points};
+                data.push(obj);
+            }
+            unsetAxes(plot);
+            plot.setData(data); 
+            plot.setupGrid();
+            plot.draw();
+            console.log(performance.now()-start);
+            var axes=plot.getAxes();
+            $('#xAxisMin').val(axes.xaxis.min);
+            $('#xAxisMax').val(axes.xaxis.max);
+            $('#yAxisMin').val(axes.yaxis.min);
+            $('#yAxisMax').val(axes.yaxis.max);
+            console.log('BEEP');
+        }
+    });
+}
 
+var data = [];
+var plot;
 
 
 
 $('#plot').click(function(){
     if (document.getElementById('graphWrapper').style.display =='none'){
         document.getElementById('graphWrapper').style.display='';
-        var plot = $.plot($('#graph'),data,options);
-        drawPlot(plot);
-    }
+        plot = $.plot($('#graph'),data,options);
+    } 
+    plotSelected(plot);
 });
 
 
+
+var novaBoxes = document.getElementsByClassName("novaeBox");
+for (i =0; i < novaBoxes.length; i++){
+    novaBoxes[i].onclick= function(){
+        var tableID=this.id+'Table';
+        var table = document.getElementById(tableID);
+        var boxes = table.getElementsByTagName('input');
+        console.log(boxes);
+        for (var j = 0;j < boxes.length; j++){
+            if (this.checked){
+                boxes[j].checked=true;
+            } else{
+                boxes[j].checked=false;
+            }
+        }
+    }
+}
 
 
 
