@@ -11,7 +11,7 @@ if (isset($_GET['objid'])){
     echo $count.' results returned';
     if ($count !=0){
         displayTable($novae,$observations);
-        include 'paginator.php';
+//        include 'paginator.php';
         include 'exportButton.php';
         if(!isset($_GET["graph"])){
             include 'plot.php';

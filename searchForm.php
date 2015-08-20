@@ -121,17 +121,15 @@ if (isset($_GET['ageMax'])){echo $_GET["ageMax"];}
 <div id='options'>
 
 Convert results to standard date? <input type="checkbox" name="MJD" <?php if($_GET['MJD']=='on'){echo 'checked';}?>>
-
 <br>
-</div>
+</div><!--
 Show <select name='count'> 
 <option>10</option>
 <option selected='selected'>100</option>
 <option>200</option>
 </select>
-
 Results
-
+-->
 <br>
 Sort By:
 <select name='sortA'>

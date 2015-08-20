@@ -50,12 +50,20 @@ var options = {
             xaxes:[{axisLabel:'Age (days)'}],
             yaxes:[{axisLabel:'Luminosity'}]
 };
+var boundOptions = {
+            series: {lines:{show:false},points:{show:true}}
+};
 
 
 var points = {errorbars:"y",yerr:{show:true, upperCap: "-", lowerCap: "-", radius:5}};
+var boundPoints = {symbol:"triangle"};
 
-
-
+var colors=['#990000',  '#993399',  '#990066',  '#990099'];  /*9900CC  9900FF
+993300  993333  993366  993399  9933CC  9933FF
+996600  996633  996666  996699  9966CC  9966FF
+999900  999933  999966  999999  9999CC  9999FF
+99CC00  99CC33  99CC66  99CC99  99CCCC  99CCFF
+99FF00  99FF33  99FF66  99FF99  99FFCC  99FFFF*/
 
 
 
@@ -110,30 +118,44 @@ function plotSelected(plot) {
         async:true, 
         success:function (result){
             var labels = [];
+            var boundList = {};
             var dataObj = {};
             console.log(result);
             jsonTable = JSON.parse(result);
             for (i = 0; i < jsonTable.length; i++){
                 console.log(jsonTable[i].fitsID);
                 var id = '#'+jsonTable[i].fitsID;
-                if (($(id).is(':checked'))&&(jsonTable[i].isUpperBound!=1) ){
+                if (($(id).is(':checked')) ){
                     console.log('beeping');
                     if (labels.indexOf(jsonTable[i].name)==-1){
                         labels.push(jsonTable[i].name);
                         dataObj[jsonTable[i].name] = [];
+                    }
+                    if (jsonTable[i].isUpperBound==1 && !boundList[jsonTable[i].name]){
+                        boundList[jsonTable[i].name]=[];
                     }
                     var row = [];
                     row[0] = jsonTable[i].age;
                     row[1] = jsonTable[i].lum;
                     row[2] = jsonTable[i].lumErrL;
                     row[3] = jsonTable[i].lumErrH;
-                    dataObj[jsonTable[i].name].push(row);
+                    if (jsonTable[i].isUpperBound==1){
+                        boundList[jsonTable[i].name].push(row);
+                    } else{
+                        dataObj[jsonTable[i].name].push(row);
+                    }
                 }
             }
             var data= [];
+            console.log(dataObj.length,labels.length);
             for (var i = 0; i < labels.length; i ++){
-                var obj = {data:dataObj[labels[i]],label:labels[i], points:points};
+                var obj = {data:dataObj[labels[i]],label:labels[i], points:points,color:colors[i]};
                 data.push(obj);
+                if (boundList[labels[i]]){
+                    console.log('boundList not empty',boundList[labels[i]]);
+                    var obj={data:boundList[labels[i]],options:boundOptions,lines:{show:false},color:colors[i],points:boundPoints};
+                    data.push(obj);
+                }
             }
             unsetAxes(plot);
             plot.setData(data); 
