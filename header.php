@@ -8,7 +8,7 @@ include'password_protect.php';
 <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 <link rel="stylesheet" type="text/css" href="/DataTables-1.10.7/media/css/jquery.dataTables.css">
 
-<script src='/scripts/source.js'></script>
+<script src='scripts/source.js'></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="flot/jquery.flot.js"></script>
