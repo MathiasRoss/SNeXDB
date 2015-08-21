@@ -22,12 +22,12 @@ include'password_protect.php';
 
 <div id='header'>
 <!--<img src="images/logoWhite.gif" alt='logo' />-->
-<h1><a href='/'>Supernovae X-Ray Database</a></h1>
+<h1><a href='<?php echo $baseDir; ?>'>Supernovae X-Ray Database</a></h1>
 </div>
 
 <div id='menu'>
 <ul>
-<li><a href='/'>Home</a></li>
+<li><a href='<?php echo $baseDir; ?>'>Home</a></li>
 <li><a href='submitUpload.php'>Submit Upload</a></li>
 <li><a href='about.php'>About</a></li>
 <li><a href='methodology.php'>Methodology</a></li>
