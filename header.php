@@ -1,5 +1,6 @@
 <!doctype html>
 <?php 
+include 'config.php';
 include'password_protect.php';
 ?>
 
