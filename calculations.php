@@ -4,17 +4,23 @@ function dispDate($date,$mjd) {
         return removeZeros($date, 1);
     }
     else {
-       return jdtojulian(mjdtojd($date)); 
+       return jdtogregorian(mjdtojd($date)); 
     }
 }
 
+
+function parseDate($stringDate) {
+    $array = explode('/',$stringDate);
+    $jd = gregoriantojd($array[0],$array[1],$array[2])-.5;
+    return $jd-2400000.5;
+}
 
 function getAge($date_observed,$date_explosion){
     return $date_observed-$date_explosion;
 }
 
 function mjdtojd($date){
-    return $date + 2400000.5;
+    return $date + 2400001.;//hack because builtin functions ignore fractional part
 }
 
 function mpctocm($distance){

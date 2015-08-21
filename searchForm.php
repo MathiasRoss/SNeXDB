@@ -120,6 +120,16 @@ if (isset($_GET['ageMax'])){echo $_GET["ageMax"];}
 -->
 <div id='options'>
 
+<br>
+Novae after 
+<input type="text" name='dateMin'>
+and before <input type="text" name = 'dateMax'>
+
+(mm/dd/yyyy)
+
+<br>
+
+
 Convert results to standard date? <input type="checkbox" name="MJD" <?php if($_GET['MJD']=='on'){echo 'checked';}?>>
 <br>
 </div><!--

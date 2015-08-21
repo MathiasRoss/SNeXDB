@@ -1,4 +1,5 @@
 <button id='plot'>Plot Selected</button>
+<br>
 
 <div id ='graphWrapper' style='display:none;'>
 <div id ='graphInnerWrapper'>
@@ -15,7 +16,6 @@ Log y axis?<input type='checkbox' id='yLog'><br>
 <button id="update">Update Plot</button>
 </div>
 </div>
-
 
 <script src="plotSource.js"></script>
 

@@ -214,13 +214,35 @@ $('#update').click(function(){
     plot.getAxes().yaxis.options.min = $('#yAxisMin').val();
     plot.getAxes().yaxis.options.max = $('#yAxisMax').val();
 
+    var yMaxOrder = Math.floor(Math.log10(plot.getAxes().yaxis.options.max));
+    var yMinOrder = Math.floor(Math.log10(plot.getAxes().yaxis.options.min+.0001));
+    console.log(yMinOrder);
 //log scales
     if ($('#yLog').is(':checked')){
-       plot.getAxes().yaxis.options.transform =  function(v) {return Math.log(v);};
+        if ($('#yAxisMin').val() == 0){
+            plot.getAxes().yaxis.options.min = .00001;
+        }
+        var yTickArray = []; 
+        for (i = yMinOrder; i < yMaxOrder; i ++){
+            yTickArray.push(Math.pow(10,i));
+        }
+        console.log(yTickArray);
+        plot.getAxes().yaxis.options.ticks = yTickArray;
+        if (yMinOrder < -3){
+            plot.getAxes().yaxis.options.tickFormatter = function(val, axis) {return'10^'+Math.floor(Math.log10(val));};
+        }
+        else {
+            plot.getAxes().yaxis.options.tickFormatter = function(val, axis) {return val;};
+            plot.getAxes().yaxis.options.tickDecimals = Math.abs(yMinOrder);
+        }
+        plot.getAxes().yaxis.options.transform =  function(v) {return Math.log(v);};
     } else {
        plot.getAxes().yaxis.options.transform = null;
 }
     if ($('#xLog').is(':checked')){
+        if ($('#xAxisMin').val() == 0){
+            plot.getAxes().xaxis.options.min = .000001;
+        }
        plot.getAxes().xaxis.options.transform =  function(v) {return Math.log(v);};
     } else {
        plot.getAxes().xaxis.options.transform = null;

@@ -9,11 +9,11 @@ $query = "SELECT Novae.redshift, Novae.redshiftErr, Novae.redshiftRef, Novae.nam
 
 //object name search
 if ($_GET["objid"] != ""){
-    $query = $query . "Observations.name = :name";
+    $query = $query . "Observations.name = :name ";
     $params[':name'] = $_GET["objid"];
 }
 else {//note: without elif could cause unnecessary performance drops; here for "where blank search" bug
-    $query = $query . "Observations.name LIKE CONCAT('%',:name,'%')";
+    $query = $query . "Observations.name LIKE CONCAT('%',:name,'%') ";
     $params[':name'] = $_GET["name"];
 }
 
@@ -60,15 +60,23 @@ if ($_GET['lumMax'] != ""){
 
 //age search
 if ($_GET['ageMin'] != ""){
-    $query = $query . "AND (dateObserved-dateExploded) >= :ageMin";
+    $query = $query . "AND (dateObserved-dateExploded) >= :ageMin ";
     $params[':ageMin'] = $_GET['ageMin'];
 }
 if ($_GET['ageMax'] != ""){
-    $query = $query . "AND (dateObserved-dateExploded) <= :ageMax";
+    $query = $query . "AND (dateObserved-dateExploded) <= :ageMax ";
     $params[':ageMax'] = $_GET['ageMax'];
 }
 
-
+//date search
+if ($_GET['dateMin'] != ""){
+    $query = $query . "AND Novae.dateExploded >= :dateMin ";
+    $params[':dateMin'] = parseDate($_GET['dateMin']);
+}
+if ($_GET['dateMax'] != ""){
+    $query = $query . "AND Novae.dateExploded <= :dateMax ";
+    $params[':dateMax'] = parseDate($_GET['dateMax']);
+}
 
 $jsonTable = array();
 

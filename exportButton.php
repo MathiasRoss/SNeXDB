@@ -1,5 +1,4 @@
 <a id='exportButton' href="javascript:toggleDiv('export')" style="color:black; text-decoration:none;">+</a>
-
 Export Options:
 <div id = 'export' style = "display:none;">
 <form method="get" action= "export.php">
@@ -31,3 +30,4 @@ Fields to export:
 <input type = "submit" value = "Export Results">
 </form>
 </div>
+<br>

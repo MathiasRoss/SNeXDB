@@ -8,15 +8,12 @@ include 'searchForm.php';
 if (isset($_GET['objid'])){
     include 'search.php';
     echo '<hr>';
+    include 'exportButton.php';
     echo $count.' results returned';
     if ($count !=0){
         displayTable($novae,$observations);
 //        include 'paginator.php';
-        include 'exportButton.php';
-        if(!isset($_GET["graph"])){
-            include 'plot.php';
-
-        }
+        include 'plot.php';
     }
 }
 
