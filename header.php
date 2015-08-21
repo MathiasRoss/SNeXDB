@@ -37,5 +37,5 @@ include'password_protect.php';
 
 
 <?php
-include 'debugFunc.php';//for debugging
+//include 'debugFunc.php';//for debugging
 ?>
