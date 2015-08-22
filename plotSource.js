@@ -56,7 +56,7 @@ var boundOptions = {
 
 
 var points = {errorbars:"y",yerr:{show:true, upperCap: "-", lowerCap: "-", radius:5}};
-var boundPoints = {symbol:"triangle"};
+var boundPoints = {symbol:"arrow"};
 
 var colors=['#990000',  '#993399',  '#990066',  '#990099'];  /*9900CC  9900FF
 993300  993333  993366  993399  9933CC  9933FF

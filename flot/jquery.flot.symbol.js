@@ -51,6 +51,14 @@ The symbols are accessed as strings through the standard symbol options:
                 ctx.lineTo(x + size, y + size);
                 ctx.moveTo(x - size, y + size);
                 ctx.lineTo(x + size, y - size);
+            },
+            arrow: function (ctx, x, y, radius, shadow) {
+                ctx.moveTo(x, y);
+                var size = 4*radius;
+                ctx.lineTo(x, y - size);
+                ctx.moveTo(x+radius,y-radius);
+                ctx.lineTo(x,y);
+                ctx.lineTo(x-radius,y-radius);
             }
         };
 

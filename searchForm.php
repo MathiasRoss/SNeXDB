@@ -114,24 +114,22 @@ if (isset($_GET['ageMax'])){echo $_GET["ageMax"];}
 >
 (days)
 <br>
-
-
-<!--Disable graphing?<input type ="checkbox" name="graph" <?php if($_GET['graph']=='on'){echo 'checked';}?>>
--->
-<div id='options'>
-
-<br>
 Novae after 
 <input type="text" name='dateMin'>
 and before <input type="text" name = 'dateMax'>
 
 (mm/dd/yyyy)
 
-<br>
+
+<!--Disable graphing?<input type ="checkbox" name="graph" <?php if($_GET['graph']=='on'){echo 'checked';}?>>
+-->
+<div id='options'>
 
 
-Convert results to standard date? <input type="checkbox" name="MJD" <?php if($_GET['MJD']=='on'){echo 'checked';}?>>
-<br>
+
+
+
+<!--Convert results to standard date? <input type="checkbox" name="MJD" <?php if($_GET['MJD']=='on'){echo 'checked';}?>>-->
 </div><!--
 Show <select name='count'> 
 <option>10</option>
@@ -150,7 +148,6 @@ Sort By:
 </select>
 <br>
 
-
 <input type = "submit" value = "Search">
-
 </form>
+<br>

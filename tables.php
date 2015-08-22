@@ -155,7 +155,7 @@ function fieldHeader($field){
 
 function fieldCell ($field, $data){
     if (empty($_GET['MJD'])){
-        $mjd = true;
+        $mjd = false;
     }
     else {
         $mjd = false;

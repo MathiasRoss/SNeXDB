@@ -7,6 +7,7 @@ Age vs. Luminosity
 <div id="graph"></div>
 </div>
 <div id = 'graphOptions'>
+<br>
 x min:<input type='text' id='xAxisMin'><br>
 x max:<input type='text' id='xAxisMax'><br>
 y min:<input type='text' id='yAxisMin'><br>
