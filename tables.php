@@ -9,7 +9,9 @@
 
 function displayTable($novae,$observations){
     echo "<table id = 'novaTable'  class='display' ><thead><tr>";
-    fieldHeader('checkBox');
+
+    echo "<th><input type='checkbox' id='selectAll'></th>";
+//    fieldHeader('checkBox');
     fieldHeader('name');
     fieldHeader('type');
     fieldHeader('dateExploded');

@@ -58,13 +58,7 @@ var boundOptions = {
 var points = {errorbars:"y",yerr:{show:true, upperCap: "-", lowerCap: "-", radius:5}};
 var boundPoints = {symbol:"arrow"};
 
-var colors=['#990000',  '#993399',  '#990066',  '#990099'];  /*9900CC  9900FF
-993300  993333  993366  993399  9933CC  9933FF
-996600  996633  996666  996699  9966CC  9966FF
-999900  999933  999966  999999  9999CC  9999FF
-99CC00  99CC33  99CC66  99CC99  99CCCC  99CCFF
-99FF00  99FF33  99FF66  99FF99  99FFCC  99FFFF*/
-
+var colors=['#F1C40F',  '#1ABC9C',  '#E74C3C',  '#2ECC71', '#E67E22', '#9B58B6'];  
 
 
 function drawPlot(plot) {
@@ -204,6 +198,23 @@ for (i =0; i < novaBoxes.length; i++){
     }
 }
 
+document.getElementById('selectAll').onclick = function() {
+    console.log('selectAll Clicked');
+    for (i = 0; i < novaBoxes.length; i ++){
+        var tableID = novaBoxes[i].id+'Table';
+        table = document.getElementById(tableID);
+        boxes = table.getElementsByTagName('input');
+        for (var j = 0; j < boxes.length; j++){
+            if (this.checked){
+                novaBoxes[i].checked=true;
+                boxes[j].checked=true;
+            } else {
+                novaBoxes[i].checked=false;
+                boxes[j].checked=false;
+            }
+        }
+    }
+}
 
 
 

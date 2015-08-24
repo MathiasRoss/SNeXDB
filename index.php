@@ -10,9 +10,11 @@ if (isset($_GET['objid'])){
     echo '<hr>';
     include 'exportButton.php';
     echo $count.' results returned';
+    echo '<br>';
     if ($count !=0){
         displayTable($novae,$observations);
 //        include 'paginator.php';
+        echo '<br>';
         include 'plot.php';
     }
 }
