@@ -20,7 +20,7 @@ include'password_protect.php';
 <script src="flot/jquery.flot.canvas.js"></script>
 
 
-<script src="scripts/html2canvas-0.5.0-alpha1/dist/html2canvas.js"></script>
+<script src="scripts/html2canvas.js"></script>
 </head>
 <body>
 <div id='wrapper'>
