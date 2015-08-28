@@ -7,11 +7,13 @@ include 'connect.php';
 include 'searchForm.php';
 if (isset($_GET['objid'])){
     include 'search.php';
-    echo '<hr>';
     include 'exportButton.php';
+    echo '<hr>';
     echo $count.' results returned';
-    echo '<br>';
     if ($count !=0){
+        echo "; click on '+' symbol to expand.";
+        echo "<br>";
+
         displayTable($novae,$observations);
 //        include 'paginator.php';
         echo '<br>';

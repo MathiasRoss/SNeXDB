@@ -7,7 +7,6 @@ include'password_protect.php';
 <meta charset="UTF-8"> 
 <head>
 <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
-<link rel="stylesheet" type="text/css" href="/DataTables-1.10.7/media/css/jquery.dataTables.css">
 
 <script src='scripts/source.js'></script>
 
@@ -16,7 +15,12 @@ include'password_protect.php';
 <script src="flot/jquery.flot.errorbars.js"></script>
 <script src="flot/jquery.flot.symbol.js"></script>
 <script src="flot/jquery.flot.axislabels.js"></script>
-<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+
+<script src="flot/jquery.flot.legendoncanvas.js"></script>
+<script src="flot/jquery.flot.canvas.js"></script>
+
+
+<script src="scripts/html2canvas-0.5.0-alpha1/dist/html2canvas.js"></script>
 </head>
 <body>
 <div id='wrapper'>

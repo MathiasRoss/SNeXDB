@@ -44,6 +44,9 @@ function getselected () {
     });
 }
 
+
+
+
 var options = { 
             series: {lines:{show:true},points:{show:true}},
             axisLabels:{show:true},
@@ -162,7 +165,20 @@ function plotSelected(plot) {
             $('#yAxisMin').val(axes.yaxis.min);
             $('#yAxisMax').val(axes.yaxis.max);
             console.log('BEEP');
+
+            html2canvas(document.getElementById('graphInnerWrapper'), {
+
+                onrendered: function(canvas){
+                    canvas.style.background='#000000';
+                    var dataURL = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+                    document.getElementById('save').href=dataURL;
+                    console.log('rendered');
+            },
+            allowTaint: true
+           });
+
         }
+
     });
 }
 
